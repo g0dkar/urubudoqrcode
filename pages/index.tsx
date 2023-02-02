@@ -3,7 +3,7 @@ import {Layout} from "@/components/layout"
 import {Input, InputClassNames} from "@/components/ui/input"
 import {Label} from "@/components/ui/label"
 import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "@/components/ui/select"
-import {useState} from "react"
+import {useEffect, useRef, useState} from "react"
 import {IMaskInput} from "react-imask"
 import {Button} from "@/components/ui/button";
 import {QrCode} from "lucide-react";
@@ -18,6 +18,27 @@ const Index = () => {
     const [valor, setValor] = useState("0")
     const [semValor, setSemValor] = useState("0")
     const [pix, setPix] = useState("...")
+    const chaveRef = useRef(null)
+    const valorRef = useRef(null)
+
+    useEffect(() => {
+        const chaveInput = chaveRef.current
+        if (chaveInput) {
+            chaveInput.id = "chave"
+            chaveInput.className = InputClassNames
+            chaveInput.tabIndex = 2
+        }
+
+        const valorInput = valorRef.current
+        if (valorInput) {
+            valorInput.id = "valor"
+            valorInput.className = InputClassNames
+            valorInput.placeholder = "Valor do Pix"
+            valorInput.tabIndex = 6
+        }
+
+        selectTipoChave("0")
+    }, [])
 
     const selectTipoChave = (selected: string) => {
         setTipo(selected)
@@ -25,10 +46,13 @@ const Index = () => {
 
         if (selected === "1") {
             setMaskChave("00.000.000/0000-00")
+            chaveRef.current.placeholder = "Chave Pix (CNPJ: 00.000.000/0000-00)"
         } else if (selected === "3") {
             setMaskChave("(00) [0]0000-0000")
+            chaveRef.current.placeholder = "Chave Pix (Telefone Celular ou Fixo)"
         } else {
             setMaskChave("000.000.000-00")
+            chaveRef.current.placeholder = "Chave Pix (CPF: 000.000.000-00)"
         }
     }
 
@@ -64,6 +88,7 @@ const Index = () => {
         setPix(codigoPix)
     }
 
+    // @ts-ignore
     return <Layout>
         <Head>
             <title>QRCode do Pix</title>
@@ -85,7 +110,7 @@ const Index = () => {
             <div className="grid grid-cols-5 gap-4">
                 <div className="col-span-3">
                     <div className="grid w-full items-center gap-1.5">
-                        <Label htmlFor="chave" className="text-md">Chave Pix <span
+                        <Label htmlFor={`chave${tipo === "2" || tipo === "4" ? tipo : ""}`} className="text-md">Chave Pix <span
                             className="text-sm text-slate-500 dark:text-slate-400">(obrigatório)</span></Label>
                         <div className="flex w-full items-center space-x-2">
                             <Select value={tipo} onValueChange={selectTipoChave}>
@@ -101,12 +126,18 @@ const Index = () => {
                                 </SelectContent>
                             </Select>
 
-                            {tipo === "2" ?
-                                <Input type="email" id="chave" value={chave} onChange={onChangeChave}
-                                       placeholder="Chave Pix" autoFocus={true} tabIndex={2} maxLength={70}/> :
+                            <span className={`w-full ${tipo === "2" || tipo === "4" ? "hidden" : ""}`}>
                                 <IMaskInput value={chave} mask={maskChave} unmask={true}
-                                            onAccept={(value) => setChave(value)} id="chave" className={InputClassNames}
-                                            placeholder="Chave Pix" tabIndex={2}/>}
+                                            onAccept={(value: string) => setChave(value)} inputRef={chaveRef}/>
+                            </span>
+                            <span className={`w-full ${tipo === "4" ? "" : "hidden"}`}>
+                                <Input type="text" id="chave4" value={chave} onChange={onChangeChave}
+                                       placeholder="Chave Pix (Chave Aleatória)" tabIndex={2} maxLength={70}/>
+                            </span>
+                            <span className={`w-full ${tipo === "2" ? "" : "hidden"}`}>
+                                <Input type="email" id="chave2" value={chave} onChange={onChangeChave}
+                                       placeholder="Chave Pix (seu.endereco@de-email.com)" tabIndex={2} maxLength={70}/>
+                            </span>
                         </div>
                         <p className="text-sm text-slate-500">Chave Pix que irá receber a transferência.</p>
                     </div>
@@ -118,7 +149,7 @@ const Index = () => {
                                maxLength={32} value={nome} onChange={onChangeNome}/>
                         <p className="text-sm text-slate-500">
                             <span
-                                className="pr-3 font-medium leading-none text-slate-300">Tamanho: {nome.length}/32</span>
+                                className="pr-3 font-medium leading-none text-slate-700 dark:text-slate-300">Tamanho: {nome.length}/32</span>
                             Nome da pessoa ou empresa que irá receber o Pix
                         </p>
                     </div>
@@ -130,7 +161,7 @@ const Index = () => {
                                maxLength={15} value={cidade} onChange={onChangeCidade}/>
                         <p className="text-sm text-slate-500">
                             <span
-                                className="pr-3 font-medium leading-none text-slate-300">Tamanho: {cidade.length}/15</span>
+                                className="pr-3 font-medium leading-none text-slate-700 dark:text-slate-300">Tamanho: {cidade.length}/15</span>
                             Cidade onde encontra-se a pessoa ou empresa que irá receber o Pix
                         </p>
                     </div>
@@ -148,21 +179,19 @@ const Index = () => {
                             </SelectContent>
                         </Select>
 
-                        {semValor === "0" ?
-                            <></> :
-                            <div className="mt-1 flex w-full items-center space-x-2">
-                                <Label htmlFor="valor">Valor:</Label>
-                                <IMaskInput value={valor} mask={Number} unmask={true} scale={2} signed={false} min={0}
-                                            max={99999} thousandsSeparator="." padFractionalZeros={true}
-                                            normalizeZeros={false} onAccept={(value) => setValor(value)} id="valor"
-                                            className={InputClassNames} placeholder="Valor" tabIndex={6}
-                                            disabled={semValor === "0"}/>
-                            </div>
-                        }
+                        <div
+                            className={`mt-2 flex max-w-[300px] items-center space-x-4 rounded-md border border-slate-300 p-4 dark:border-slate-600${semValor === "0" ? " hidden" : ""}`}>
+                            <Label htmlFor="valor">Valor:</Label>
+                            <IMaskInput value={valor} mask={Number} unmask={true} scale={2} signed={false} min={0}
+                                        max={99999} thousandsSeparator="." padFractionalZeros={true}
+                                        inputRef={valorRef} normalizeZeros={false}
+                                        onAccept={(value: string) => setValor(value)}/>
+                        </div>
                     </div>
 
                     <div className="mt-6">
-                        <Button className="text-md px-10" disabled={chave === "" || nome === "" || cidade === ""} onClick={gerarQRCode}>
+                        <Button className="text-md px-10" disabled={chave === "" || nome === "" || cidade === ""}
+                                onClick={gerarQRCode}>
                             <QrCode className="mr-2 h-4 w-4"/> Gerar QRCode
                         </Button>
                     </div>
