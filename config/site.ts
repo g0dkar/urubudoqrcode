@@ -1,29 +1,23 @@
-import { NavItem } from "@/types/nav"
+import {NavItem} from "@/types/nav"
 
 interface SiteConfig {
-  name: string
-  description: string
-  mainNav: NavItem[]
-  links: {
-    twitter: string
-    github: string
-    docs: string
-  }
+    name: string
+    description: string
+    mainNav: NavItem[]
 }
 
 export const siteConfig: SiteConfig = {
-  name: "Next.js",
-  description:
-    "Beautifully designed components built with Radix UI and Tailwind CSS.",
-  mainNav: [
-    {
-      title: "Home",
-      href: "/",
-    },
-  ],
-  links: {
-    twitter: "https://twitter.com/shadcn",
-    github: "https://github.com/shadcn/ui",
-    docs: "https://ui.shadcn.com",
-  },
+    name: "QRCode do Pix",
+    description:
+        "Um site onde você pode gerar seu QRCode para receber pagamentos via Pix",
+    mainNav: [
+        {
+            title: "Início",
+            href: "/",
+        },
+        {
+            title: "Como funciona?",
+            href: "/como-funciona",
+        },
+    ]
 }

@@ -1,14 +1,15 @@
-import { SiteHeader } from "@/components/site-header"
+import {SiteHeader} from "@/components/site-header"
+import React from "react";
 
 interface LayoutProps {
-  children: React.ReactNode
+    children: React.ReactNode
 }
 
-export function Layout({ children }: LayoutProps) {
-  return (
-    <>
-      <SiteHeader />
-      <main>{children}</main>
-    </>
-  )
+export function Layout({children}: LayoutProps) {
+    return (
+        <>
+            <SiteHeader/>
+            <main>{children}</main>
+        </>
+    )
 }

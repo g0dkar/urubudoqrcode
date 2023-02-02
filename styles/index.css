@@ -1,0 +1,5 @@
+.logo-grad {
+    background: linear-gradient(to bottom right, #37b4aa 0%, #00767e 100%);
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
