@@ -38,7 +38,7 @@ export default class PixQRCode {
     }
 
     city() {
-        return this.pixField("60", this.cidade)
+        return this.pixField("60", this.cidade.toUpperCase())
     }
 
     value() {
@@ -50,7 +50,7 @@ export default class PixQRCode {
     }
 
     codigo() {
-        const pix = (this.pixPayload() + this.accountInfo() + this.category() + this.currency() + this.country() + this.recipient() + this.city() + this.value() + this.crcPrefix()).toUpperCase()
+        const pix = this.pixPayload() + this.accountInfo() + this.category() + this.currency() + this.country() + this.recipient() + this.city() + this.value() + this.crcPrefix()
         return pix + crc16(pix).toString(16).toUpperCase()
     }
 }

@@ -6,7 +6,7 @@ import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "@/c
 import {useEffect, useRef, useState} from "react"
 import {IMaskInput} from "react-imask"
 import {Button} from "@/components/ui/button";
-import {QrCode} from "lucide-react";
+import {Building, Copy, DollarSign, FormInputIcon, Key, Pencil, QrCode, RefreshCw, User} from "lucide-react";
 import PixQRCode from "@/lib/pix";
 
 const Index = () => {
@@ -17,7 +17,7 @@ const Index = () => {
     const [cidade, setCidade] = useState("")
     const [valor, setValor] = useState("0")
     const [semValor, setSemValor] = useState("0")
-    const [pix, setPix] = useState("...")
+    const [pix, setPix] = useState(null)
     const chaveRef = useRef(null)
     const valorRef = useRef(null)
 
@@ -86,9 +86,19 @@ const Index = () => {
         const codigoPix = pixQrCode.codigo()
 
         setPix(codigoPix)
+        //const qrCode = new QRCode(codigoPix).render()
     }
 
-    // @ts-ignore
+    const recomecarQRCode = () => {
+        setPix(null)
+        setTipo("0")
+        setNome("")
+        setChave("")
+        setCidade("")
+        setValor("0")
+        setSemValor("0")
+    }
+
     return <Layout>
         <Head>
             <title>QRCode do Pix</title>
@@ -97,24 +107,36 @@ const Index = () => {
             <link rel="icon" href="/favicon.ico"/>
         </Head>
         <section className="container grid items-center gap-6 pt-6 pb-8 md:py-10">
-            <div className="flex max-w-[980px] flex-col items-start gap-2">
+            <div className="flex max-w-full flex-col items-start gap-2">
                 <h1 className="logo-grad text-3xl font-extrabold leading-tight tracking-tighter sm:text-3xl md:text-5xl lg:text-6xl">
                     QRCode do Pix
                 </h1>
-                <p className="max-w-[700px] text-lg text-slate-700 dark:text-slate-400 sm:text-xl">
-                    Seguro, Prático, Rápido e Gratuito! Crie um QRCode para receber pagamentos Pix em seu negócio
-                    agora mesmo - <span className="text-lg font-semibold text-slate-900 dark:text-slate-50">Todo o processo
-                    é offline e acontece no seu navegador!</span>
-                </p>
+                <div className="grid w-full grid-cols-5 gap-4">
+                    <div className="col-span-5 lg:col-span-3">
+                        <p className="text-lg text-slate-700 dark:text-slate-400 sm:text-xl">
+                            Seguro, Prático, Rápido e Gratuito! Crie um QRCode para receber pagamentos Pix em seu
+                            negócio
+                            agora mesmo - <span className="text-lg font-semibold text-slate-900 dark:text-slate-50">Todo o processo
+                            é offline e acontece no seu navegador!</span>
+                        </p>
+                    </div>
+                </div>
             </div>
-            <div className="grid grid-cols-5 gap-4">
-                <div className="col-span-3">
+            <div className="grid w-full grid-cols-5 gap-4">
+                <div className="col-span-5 lg:col-span-3">
+                    <h2 className="mt-10 mb-5 scroll-m-20 border-b border-b-slate-200 pb-2 text-3xl font-semibold tracking-tight transition-colors first:mt-0 dark:border-b-slate-700">
+                        <FormInputIcon className="mb-1 mr-2 inline-block"/>
+                        Informações do Pix
+                    </h2>
+
                     <div className="grid w-full items-center gap-1.5">
-                        <Label htmlFor={`chave${tipo === "2" || tipo === "4" ? tipo : ""}`} className="text-md">Chave Pix <span
-                            className="text-sm text-slate-500 dark:text-slate-400">(obrigatório)</span></Label>
-                        <div className="flex w-full items-center space-x-2">
+                        <Label htmlFor={`chave${tipo === "2" || tipo === "4" ? tipo : ""}`} className="text-md">
+                            <Key className="mb-1 mr-1 inline-block w-4"/>
+                            Chave Pix <span className="text-sm text-slate-500 dark:text-slate-400">(obrigatório)</span></Label>
+                        <div
+                            className="flex w-full flex-col items-center space-y-2 md:flex-row md:space-x-2 md:space-y-0">
                             <Select value={tipo} onValueChange={selectTipoChave}>
-                                <SelectTrigger className="w-[200px]" tabIndex={1}>
+                                <SelectTrigger className="w-full sm:w-[200px]" tabIndex={1}>
                                     <SelectValue placeholder="Tipo de Chave"/>
                                 </SelectTrigger>
                                 <SelectContent>
@@ -126,15 +148,15 @@ const Index = () => {
                                 </SelectContent>
                             </Select>
 
-                            <span className={`w-full ${tipo === "2" || tipo === "4" ? "hidden" : ""}`}>
+                            <span className={`w-full${tipo === "2" || tipo === "4" ? " hidden" : ""}`}>
                                 <IMaskInput value={chave} mask={maskChave} unmask={true}
                                             onAccept={(value: string) => setChave(value)} inputRef={chaveRef}/>
                             </span>
-                            <span className={`w-full ${tipo === "4" ? "" : "hidden"}`}>
+                            <span className={`w-full${tipo === "4" ? "" : " hidden"}`}>
                                 <Input type="text" id="chave4" value={chave} onChange={onChangeChave}
                                        placeholder="Chave Pix (Chave Aleatória)" tabIndex={2} maxLength={70}/>
                             </span>
-                            <span className={`w-full ${tipo === "2" ? "" : "hidden"}`}>
+                            <span className={`w-full${tipo === "2" ? "" : " hidden"}`}>
                                 <Input type="email" id="chave2" value={chave} onChange={onChangeChave}
                                        placeholder="Chave Pix (seu.endereco@de-email.com)" tabIndex={2} maxLength={70}/>
                             </span>
@@ -143,8 +165,11 @@ const Index = () => {
                     </div>
 
                     <div className="mt-6 grid w-full items-center gap-1.5">
-                        <Label htmlFor="nome" className="text-md">Nome do(a) Beneficiário(a) <span
-                            className="text-sm text-slate-500 dark:text-slate-400">(obrigatório)</span></Label>
+                        <Label htmlFor="nome" className="text-md">
+                            <User className="mb-1 mr-1 inline-block w-4"/>
+                            Nome do(a) Beneficiário(a) <span
+                            className="text-sm text-slate-500 dark:text-slate-400">(obrigatório)</span>
+                        </Label>
                         <Input type="text" id="nome" placeholder="Nome do(a) Beneficiário(a)" tabIndex={3}
                                maxLength={32} value={nome} onChange={onChangeNome}/>
                         <p className="text-sm text-slate-500">
@@ -155,8 +180,11 @@ const Index = () => {
                     </div>
 
                     <div className="mt-6 grid w-full items-center gap-1.5">
-                        <Label htmlFor="cidade" className="text-md">Cidade do(a) Beneficiário(a) <span
-                            className="text-sm text-slate-500 dark:text-slate-400">(obrigatório)</span></Label>
+                        <Label htmlFor="cidade" className="text-md">
+                            <Building className="mb-1 mr-1 inline-block w-4"/>
+                            Cidade do(a) Beneficiário(a) <span
+                            className="text-sm text-slate-500 dark:text-slate-400">(obrigatório)</span>
+                        </Label>
                         <Input type="text" id="cidade" placeholder="Cidade do(a) Beneficiário(a)" tabIndex={4}
                                maxLength={15} value={cidade} onChange={onChangeCidade}/>
                         <p className="text-sm text-slate-500">
@@ -167,7 +195,10 @@ const Index = () => {
                     </div>
 
                     <div className="mt-6 grid w-full items-center gap-1.5">
-                        <Label htmlFor="selectValor" className="text-md">Valor do Pix</Label>
+                        <Label htmlFor="selectValor" className="text-md">
+                            <DollarSign className="mb-1 mr-1 inline-block w-4"/>
+                            Valor do Pix
+                        </Label>
 
                         <Select value={semValor} onValueChange={selectSemValor}>
                             <SelectTrigger id="selectValor" className="w-auto" tabIndex={5}>
@@ -189,16 +220,49 @@ const Index = () => {
                         </div>
                     </div>
 
-                    <div className="mt-6">
-                        <Button className="text-md px-10" disabled={chave === "" || nome === "" || cidade === ""}
-                                onClick={gerarQRCode}>
-                            <QrCode className="mr-2 h-4 w-4"/> Gerar QRCode
+                    <div className="mt-6 flex w-full gap-3 items-center">
+                        <Button
+                            className="text-md bg-emerald-500 px-8 hover:bg-emerald-600 dark:bg-emerald-500 dark:hover:bg-emerald-600"
+                            disabled={chave === "" || nome === "" || cidade === ""} size="lg"
+                            onClick={gerarQRCode}>
+                            <QrCode className="mr-2 w-4"/>
+                            Gerar QRCode
+                        </Button>
+                        <Button variant="outline" className="px-4" onClick={recomecarQRCode} size="sm">
+                            <RefreshCw className="mr-2 w-4"/>
+                            Recomeçar
                         </Button>
                     </div>
                 </div>
-                <div>
-                    <h2>QRCode</h2>
-                    <p>Pix copia e cola: {pix}</p>
+                <div className="col-span-5 lg:col-span-2">
+                    <h2 className="mt-10 mb-5 scroll-m-20 border-b border-b-slate-200 pb-2 text-3xl font-semibold tracking-tight transition-colors first:mt-0 dark:border-b-slate-700">
+                        <QrCode className="mb-1 mr-2 inline-block"/>
+                        Seu QRCode
+                    </h2>
+                    <div className={pix === null ? "hidden" : ""}>
+                        <h3>
+                            <Pencil className="mr-2 mb-1 inline w-4"/>
+                            Pix Copia-e-Cola:
+                        </h3>
+                        <p className="break-words rounded-md border border-emerald-300 p-4 dark:border-emerald-900">
+                            <code
+                                className="relative rounded bg-slate-100 py-[0.2rem] px-[0.3rem] font-mono text-sm font-semibold text-slate-900 dark:bg-slate-800 dark:text-slate-400">
+                                {pix}
+                            </code>
+                        </p>
+                        <div className="mt-1 text-right">
+                            <Button variant="outline" className="px-4" onClick={recomecarQRCode} size="sm">
+                                <Copy className="mr-2 w-4"/>
+                                Copiar
+                            </Button>
+                        </div>
+                    </div>
+                    <div
+                        className={`rounded-md border border-emerald-300 p-4 dark:border-emerald-900${pix === null ? "" : " hidden"}`}>
+                        <p>Preencha as informações e clique em <span
+                            className="font-bold text-emerald-600">Gerar QRCode</span> para ter seu QRCode e começar a
+                            receber Pix :)</p>
+                    </div>
                 </div>
             </div>
         </section>
