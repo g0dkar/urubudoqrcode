@@ -6,8 +6,20 @@ import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "@/c
 import {useEffect, useRef, useState} from "react"
 import {IMaskInput} from "react-imask"
 import {Button} from "@/components/ui/button";
-import {Building, Copy, DollarSign, FormInputIcon, Key, Pencil, QrCode, RefreshCw, User} from "lucide-react";
+import {
+    Building,
+    ChevronsRight,
+    Copy,
+    DollarSign,
+    FormInputIcon,
+    Key,
+    Pencil,
+    QrCode,
+    RefreshCw,
+    User
+} from "lucide-react";
 import PixQRCode from "@/lib/pix";
+import {Checkbox} from "@/components/ui/checkbox";
 
 const Index = () => {
     const [tipo, setTipo] = useState("0")
@@ -93,10 +105,10 @@ const Index = () => {
         setPix(null)
         setTipo("0")
         setNome("")
-        setChave("")
         setCidade("")
         setValor("0")
         setSemValor("0")
+        selectTipoChave("0")
     }
 
     return <Layout>
@@ -220,7 +232,7 @@ const Index = () => {
                         </div>
                     </div>
 
-                    <div className="mt-6 flex w-full gap-3 items-center">
+                    <div className="mt-6 flex w-full items-center gap-3">
                         <Button
                             className="text-md bg-emerald-500 px-8 hover:bg-emerald-600 dark:bg-emerald-500 dark:hover:bg-emerald-600"
                             disabled={chave === "" || nome === "" || cidade === ""} size="lg"
@@ -236,10 +248,21 @@ const Index = () => {
                 </div>
                 <div className="col-span-5 lg:col-span-2">
                     <h2 className="mt-10 mb-5 scroll-m-20 border-b border-b-slate-200 pb-2 text-3xl font-semibold tracking-tight transition-colors first:mt-0 dark:border-b-slate-700">
-                        <QrCode className="mb-1 mr-2 inline-block"/>
+                        <ChevronsRight className="mb-1 mr-2 inline-block"/>
                         Seu QRCode
                     </h2>
                     <div className={pix === null ? "hidden" : ""}>
+                        <h3>
+                            <QrCode className="mr-2 mb-1 inline w-4"/>
+                            QRCode:
+                        </h3>
+
+
+
+                        <p className="my-4 border-b border-slate-300 py-2 text-xs text-center italic text-slate-600 dark:border-slate-600 dark:text-slate-400">
+                            Dica: Para testar, abra o aplicativo do seu banco e leia esse QRCode!
+                        </p>
+
                         <h3>
                             <Pencil className="mr-2 mb-1 inline w-4"/>
                             Pix Copia-e-Cola:
@@ -250,7 +273,13 @@ const Index = () => {
                                 {pix}
                             </code>
                         </p>
-                        <div className="mt-1 text-right">
+                        <div className="mt-1 flex items-center">
+                            <div className="flex w-full items-center space-x-2">
+                                <Checkbox id="curiosidade" />
+                                <label htmlFor="curiosidade" className="text-sm leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+                                    Mostrar um pouco de como esse código é montado
+                                </label>
+                            </div>
                             <Button variant="outline" className="px-4" onClick={recomecarQRCode} size="sm">
                                 <Copy className="mr-2 w-4"/>
                                 Copiar
