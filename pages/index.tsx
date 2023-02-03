@@ -6,18 +6,7 @@ import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "@/c
 import {useEffect, useRef, useState} from "react"
 import {IMaskInput} from "react-imask"
 import {Button} from "@/components/ui/button";
-import {
-    Building,
-    ChevronsRight,
-    Copy,
-    DollarSign,
-    FormInputIcon,
-    Key,
-    Pencil,
-    QrCode,
-    RefreshCw,
-    User
-} from "lucide-react";
+import {Building, ChevronsRight, Copy, DollarSign, FormInput, Key, Pencil, QrCode, RefreshCw, User} from "lucide-react";
 import PixQRCode from "@/lib/pix";
 import {Checkbox} from "@/components/ui/checkbox";
 
@@ -29,7 +18,7 @@ const Index = () => {
     const [cidade, setCidade] = useState("")
     const [valor, setValor] = useState("0")
     const [semValor, setSemValor] = useState("0")
-    const [pix, setPix] = useState(null)
+    const [pix, setPix] = useState("")
     const chaveRef = useRef(null)
     const valorRef = useRef(null)
 
@@ -101,7 +90,8 @@ const Index = () => {
         //const qrCode = new QRCode(codigoPix).render()
     }
 
-    const recomecarQRCode = () => {
+    const recomecarQRCode = (evt) => {
+        evt.preventDefault()
         setPix(null)
         setTipo("0")
         setNome("")
@@ -109,6 +99,11 @@ const Index = () => {
         setValor("0")
         setSemValor("0")
         selectTipoChave("0")
+    }
+
+    const copiarPix = (evt) => {
+        evt.preventDefault()
+        console.log("Copiar pix...")
     }
 
     return <Layout>
@@ -137,7 +132,7 @@ const Index = () => {
             <div className="grid w-full grid-cols-5 gap-4">
                 <div className="col-span-5 lg:col-span-3">
                     <h2 className="mt-10 mb-5 scroll-m-20 border-b border-b-slate-200 pb-2 text-3xl font-semibold tracking-tight transition-colors first:mt-0 dark:border-b-slate-700">
-                        <FormInputIcon className="mb-1 mr-2 inline-block"/>
+                        <FormInput className="mb-1 mr-2 inline-block"/>
                         Informações do Pix
                     </h2>
 
@@ -232,16 +227,16 @@ const Index = () => {
                         </div>
                     </div>
 
-                    <div className="mt-6 flex w-full items-center gap-3">
+                    <div className="mt-6 grid w-full items-center justify-items-center gap-3 md:flex">
                         <Button
-                            className="text-md bg-emerald-500 px-8 hover:bg-emerald-600 dark:bg-emerald-500 dark:hover:bg-emerald-600"
+                            className="text-md w-full bg-emerald-500 px-8 hover:bg-emerald-600 dark:bg-emerald-500 dark:hover:bg-emerald-600 md:w-fit"
                             disabled={chave === "" || nome === "" || cidade === ""} size="lg"
                             onClick={gerarQRCode}>
-                            <QrCode className="mr-2 w-4"/>
+                            <QrCode className="mr-2 inline-block w-4"/>
                             Gerar QRCode
                         </Button>
-                        <Button variant="outline" className="px-4" onClick={recomecarQRCode} size="sm">
-                            <RefreshCw className="mr-2 w-4"/>
+                        <Button variant="outline" className="w-fit px-4" onClick={recomecarQRCode} size="sm">
+                            <RefreshCw className="mr-2 inline-block w-4"/>
                             Recomeçar
                         </Button>
                     </div>
@@ -251,15 +246,13 @@ const Index = () => {
                         <ChevronsRight className="mb-1 mr-2 inline-block"/>
                         Seu QRCode
                     </h2>
-                    <div className={pix === null ? "hidden" : ""}>
+                    <div className={pix === "" ? "hidden" : ""}>
                         <h3>
-                            <QrCode className="mr-2 mb-1 inline w-4"/>
+                            <QrCode className="mr-2 mb-1 inline-block w-4"/>
                             QRCode:
                         </h3>
 
-
-
-                        <p className="my-4 border-b border-slate-300 py-2 text-xs text-center italic text-slate-600 dark:border-slate-600 dark:text-slate-400">
+                        <p className="my-4 border-b border-slate-300 py-2 text-center text-xs italic text-slate-600 dark:border-slate-600 dark:text-slate-400">
                             Dica: Para testar, abra o aplicativo do seu banco e leia esse QRCode!
                         </p>
 
@@ -275,19 +268,19 @@ const Index = () => {
                         </p>
                         <div className="mt-1 flex items-center">
                             <div className="flex w-full items-center space-x-2">
-                                <Checkbox id="curiosidade" />
-                                <label htmlFor="curiosidade" className="text-sm leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
-                                    Mostrar um pouco de como esse código é montado
-                                </label>
+                                <Checkbox id="curiosidade"/>
+                                <Label htmlFor="curiosidade">
+                                    Como funciona?
+                                </Label>
                             </div>
-                            <Button variant="outline" className="px-4" onClick={recomecarQRCode} size="sm">
+                            <Button variant="outline" className="px-4" onClick={copiarPix} size="sm">
                                 <Copy className="mr-2 w-4"/>
                                 Copiar
                             </Button>
                         </div>
                     </div>
                     <div
-                        className={`rounded-md border border-emerald-300 p-4 dark:border-emerald-900${pix === null ? "" : " hidden"}`}>
+                        className={"rounded-md border border-emerald-300 p-4 dark:border-emerald-900" + (pix === "" ? "" : " hidden")}>
                         <p>Preencha as informações e clique em <span
                             className="font-bold text-emerald-600">Gerar QRCode</span> para ter seu QRCode e começar a
                             receber Pix :)</p>

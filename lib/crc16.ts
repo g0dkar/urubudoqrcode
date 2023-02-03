@@ -34,20 +34,18 @@ const crcTable = new Uint16Array([
 ]);
 
 export default function crc16(s) {
-    let crc = 0xFFFF;
-    let j, i, c;
+    let crc = 0xFFFF, j, i, c
 
     for (i = 0; i < s.length; i++) {
-        c = s.charCodeAt(i);
+        c = s.charCodeAt(i)
 
         if (c > 255) {
-            throw new RangeError();
+            throw new RangeError()
         }
 
-        j = (c ^ (crc >> 8)) & 0xFF;
-        crc = crcTable[j] ^ (crc << 8);
+        j = (c ^ (crc >> 8)) & 0xFF
+        crc = crcTable[j] ^ (crc << 8)
     }
 
-    return ((crc ^ 0) & 0xFFFF);
-
+    return ((crc ^ 0) & 0xFFFF)
 }
