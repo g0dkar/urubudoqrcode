@@ -92,7 +92,7 @@ const Index = () => {
 
     const recomecarQRCode = (evt) => {
         evt.preventDefault()
-        setPix(null)
+        setPix("")
         setTipo("0")
         setNome("")
         setCidade("")
