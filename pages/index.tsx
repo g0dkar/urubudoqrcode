@@ -79,6 +79,8 @@ const Index = () => {
             valorInput.placeholder = "Valor do Pix"
             valorInput.tabIndex = 6
         }
+
+        selectTipoChave("0")
     }, [])
 
     const selectTipoChave = (selected: string) => {
