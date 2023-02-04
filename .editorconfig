@@ -17,7 +17,7 @@ ij_smart_tabs = false
 ij_visual_guides = none
 ij_wrap_on_typing = true
 
-[*.{js, jsx, md, htm, html, css}]
+[*.{js, jsx, md, htm, html, css, ts, tsx}]
 continuation_indent_size = 4
 ij_javascript_force_quote_style = true
 ij_javascript_use_double_quotes = true
@@ -32,7 +32,7 @@ ij_editorconfig_space_before_colon = false
 ij_editorconfig_space_before_comma = false
 ij_editorconfig_spaces_around_assignment_operators = true
 
-[{*.cjs,*.js}]
+[*.{cjs,js,ts,tsx}]
 ij_javascript_align_imports = false
 ij_javascript_align_multiline_array_initializer_expression = true
 ij_javascript_align_multiline_binary_operation = true

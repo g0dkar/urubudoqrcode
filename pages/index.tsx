@@ -5,12 +5,46 @@ import {Label} from "@/components/ui/label"
 import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "@/components/ui/select"
 import {useEffect, useRef, useState} from "react"
 import {IMaskInput} from "react-imask"
-import {Button} from "@/components/ui/button";
-import {Building, ChevronsRight, Copy, DollarSign, FormInput, Key, Pencil, QrCode, RefreshCw, User} from "lucide-react";
-import PixQRCode from "@/lib/pix";
-import {Checkbox} from "@/components/ui/checkbox";
+import {Button} from "@/components/ui/button"
+import {Building, ChevronsRight, Copy, DollarSign, FormInput, Key, Pencil, QrCode, RefreshCw, User} from "lucide-react"
+import PixQRCode from "@/lib/pix"
+import {Checkbox} from "@/components/ui/checkbox"
+import {Popover, PopoverContent, PopoverTrigger} from "@/components/ui/popover";
+import {cn} from "@/lib/utils";
+
+const CampoPix = ({show, campo, className = ""}) => {
+    if (!show) {
+        return <code
+            className="text-md relative bg-slate-100 py-[0.2rem] font-mono text-slate-900 first:rounded-l first:pl-[0.3rem] last:rounded-r last:pr-[0.3rem] dark:bg-slate-800 dark:text-slate-400">
+            {campo?.computed}
+        </code>
+    } else {
+        return <Popover>
+            <PopoverTrigger
+                className={cn("text-md relative mr-1 mb-1 inline-block cursor-pointer rounded bg-slate-100 py-[0.2rem]" +
+                    " px-[0.3rem] font-mono text-slate-900 hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-400" +
+                    " hover:dark:bg-slate-700", className)}>
+                {campo?.computed}
+            </PopoverTrigger>
+            <PopoverContent className="w-96 shadow-md">
+                <div className="space-y-2">
+                    <h4 className="text-sm font-semibold">
+                        ID: <span className="font-mono font-semibold">{campo?.id}</span>
+                    </h4>
+                    <h4 className="text-sm">
+                        Descrição do BaCen: <span className="font-semibold">{campo?.bacenDescription}</span>
+                    </h4>
+                    <p className="text-sm">
+                        {campo?.description}
+                    </p>
+                </div>
+            </PopoverContent>
+        </Popover>
+    }
+}
 
 const Index = () => {
+    /*
     const [tipo, setTipo] = useState("0")
     const [chave, setChave] = useState("")
     const [maskChave, setMaskChave] = useState("000.000.000-00")
@@ -19,6 +53,17 @@ const Index = () => {
     const [valor, setValor] = useState("0")
     const [semValor, setSemValor] = useState("0")
     const [pix, setPix] = useState("")
+    */
+    const x = true
+    const [tipo, setTipo] = useState("0")
+    const [chave, setChave] = useState("99602342315")
+    const [maskChave, setMaskChave] = useState("000.000.000-00")
+    const [nome, setNome] = useState("Rafael")
+    const [cidade, setCidade] = useState("Teresina")
+    const [valor, setValor] = useState("0")
+    const [semValor, setSemValor] = useState("0")
+    const [pix, setPix] = useState(null)
+    const [comoFunciona, setComoFunciona] = useState(false)
     const chaveRef = useRef(null)
     const valorRef = useRef(null)
 
@@ -37,8 +82,6 @@ const Index = () => {
             valorInput.placeholder = "Valor do Pix"
             valorInput.tabIndex = 6
         }
-
-        selectTipoChave("0")
     }, [])
 
     const selectTipoChave = (selected: string) => {
@@ -77,9 +120,12 @@ const Index = () => {
     }
 
     const gerarQRCode = (evt) => {
-        evt.preventDefault()
+        if (evt) {
+            evt.preventDefault()
+        }
+
         const pixQrCode = new PixQRCode()
-        pixQrCode.chave = chave
+        pixQrCode.chave = (tipo === "3" ? "+55" : "") + chave
         pixQrCode.nome = nome
         pixQrCode.cidade = cidade
         pixQrCode.valor = semValor === "0" ? null : Number(valor)
@@ -88,6 +134,13 @@ const Index = () => {
 
         setPix(codigoPix)
         //const qrCode = new QRCode(codigoPix).render()
+    }
+
+    if (x) {
+        // eslint-disable-next-line react-hooks/rules-of-hooks
+        useEffect(() => {
+            gerarQRCode(null)
+        }, [])
     }
 
     const recomecarQRCode = (evt) => {
@@ -155,18 +208,21 @@ const Index = () => {
                                 </SelectContent>
                             </Select>
 
-                            <span className={`w-full${tipo === "2" || tipo === "4" ? " hidden" : ""}`}>
-                                <IMaskInput value={chave} mask={maskChave} unmask={true}
-                                            onAccept={(value: string) => setChave(value)} inputRef={chaveRef}/>
-                            </span>
-                            <span className={`w-full${tipo === "4" ? "" : " hidden"}`}>
-                                <Input type="text" id="chave4" value={chave} onChange={onChangeChave}
-                                       placeholder="Chave Pix (Chave Aleatória)" tabIndex={2} maxLength={70}/>
-                            </span>
-                            <span className={`w-full${tipo === "2" ? "" : " hidden"}`}>
-                                <Input type="email" id="chave2" value={chave} onChange={onChangeChave}
-                                       placeholder="Chave Pix (seu.endereco@de-email.com)" tabIndex={2} maxLength={70}/>
-                            </span>
+                            <div className={cn("w-full", comoFunciona ? "rounded outline outline-2" +
+                                " outline-offset-2 outline-lime-700" : "")}>
+                                <span className={`w-full${tipo === "2" || tipo === "4" ? " hidden" : ""}`}>
+                                    <IMaskInput value={chave} mask={maskChave} unmask={true}
+                                                onAccept={(value: string) => setChave(value)} inputRef={chaveRef}/>
+                                </span>
+                                <span className={`w-full${tipo === "4" ? "" : " hidden"}`}>
+                                    <Input type="text" id="chave4" value={chave} onChange={onChangeChave}
+                                           placeholder="Chave Pix (Chave Aleatória)" tabIndex={2} maxLength={70}/>
+                                </span>
+                                <span className={`w-full${tipo === "2" ? "" : " hidden"}`}>
+                                    <Input type="email" id="chave2" value={chave} onChange={onChangeChave}
+                                           placeholder="Chave Pix (seu.endereco@de-email.com)" tabIndex={2} maxLength={70}/>
+                                </span>
+                            </div>
                         </div>
                         <p className="text-sm text-slate-500">Chave Pix que irá receber a transferência.</p>
                     </div>
@@ -177,8 +233,11 @@ const Index = () => {
                             Nome do(a) Beneficiário(a) <span
                             className="text-sm text-slate-500 dark:text-slate-400">(obrigatório)</span>
                         </Label>
-                        <Input type="text" id="nome" placeholder="Nome do(a) Beneficiário(a)" tabIndex={3}
-                               maxLength={32} value={nome} onChange={onChangeNome}/>
+                        <div className={cn("w-full", comoFunciona ? "rounded outline outline-2" +
+                            " outline-offset-2 outline-sky-700" : "")}>
+                            <Input type="text" id="nome" placeholder="Nome do(a) Beneficiário(a)" tabIndex={3}
+                                   maxLength={32} value={nome} onChange={onChangeNome}/>
+                        </div>
                         <p className="text-sm text-slate-500">
                             <span
                                 className="pr-3 font-medium leading-none text-slate-700 dark:text-slate-300">Tamanho: {nome.length}/32</span>
@@ -192,8 +251,11 @@ const Index = () => {
                             Cidade do(a) Beneficiário(a) <span
                             className="text-sm text-slate-500 dark:text-slate-400">(obrigatório)</span>
                         </Label>
-                        <Input type="text" id="cidade" placeholder="Cidade do(a) Beneficiário(a)" tabIndex={4}
-                               maxLength={15} value={cidade} onChange={onChangeCidade}/>
+                        <div className={cn("w-full", comoFunciona ? "rounded outline outline-2" +
+                            " outline-offset-2 outline-yellow-700" : "")}>
+                            <Input type="text" id="cidade" placeholder="Cidade do(a) Beneficiário(a)" tabIndex={4}
+                                   maxLength={15} value={cidade} onChange={onChangeCidade}/>
+                        </div>
                         <p className="text-sm text-slate-500">
                             <span
                                 className="pr-3 font-medium leading-none text-slate-700 dark:text-slate-300">Tamanho: {cidade.length}/15</span>
@@ -207,23 +269,26 @@ const Index = () => {
                             Valor do Pix
                         </Label>
 
-                        <Select value={semValor} onValueChange={selectSemValor}>
-                            <SelectTrigger id="selectValor" className="w-auto" tabIndex={5}>
-                                <SelectValue placeholder="Pedir valor?"/>
-                            </SelectTrigger>
-                            <SelectContent>
-                                <SelectItem value="0">Sem valor definido</SelectItem>
-                                <SelectItem value="1">Definir um valor específico</SelectItem>
-                            </SelectContent>
-                        </Select>
+                        <div className={cn("w-full", comoFunciona ? "rounded outline outline-2" +
+                            " outline-offset-2 outline-pink-700" : "")}>
+                            <Select value={semValor} onValueChange={selectSemValor}>
+                                <SelectTrigger id="selectValor" className="w-full" tabIndex={5}>
+                                    <SelectValue placeholder="Pedir valor?"/>
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <SelectItem value="0">Sem valor definido</SelectItem>
+                                    <SelectItem value="1">Definir um valor específico</SelectItem>
+                                </SelectContent>
+                            </Select>
 
-                        <div
-                            className={`mt-2 flex max-w-[300px] items-center space-x-4 rounded-md border border-slate-300 p-4 dark:border-slate-600${semValor === "0" ? " hidden" : ""}`}>
-                            <Label htmlFor="valor">Valor:</Label>
-                            <IMaskInput value={valor} mask={Number} unmask={true} scale={2} signed={false} min={0}
-                                        max={99999} thousandsSeparator="." padFractionalZeros={true}
-                                        inputRef={valorRef} normalizeZeros={false}
-                                        onAccept={(value: string) => setValor(value)}/>
+                            <div
+                                className={`mt-2 flex max-w-[300px] items-center space-x-4 rounded-md border border-slate-300 p-4 dark:border-slate-600${semValor === "0" ? " hidden" : ""}`}>
+                                <Label htmlFor="valor">Valor:</Label>
+                                <IMaskInput value={valor} mask={Number} unmask={true} scale={2} signed={false} min={0}
+                                            max={99999} thousandsSeparator="." padFractionalZeros={true}
+                                            inputRef={valorRef} normalizeZeros={false}
+                                            onAccept={(value: string) => setValor(value)}/>
+                            </div>
                         </div>
                     </div>
 
@@ -246,7 +311,7 @@ const Index = () => {
                         <ChevronsRight className="mb-1 mr-2 inline-block"/>
                         Seu QRCode
                     </h2>
-                    <div className={pix === "" ? "hidden" : ""}>
+                    <div className={pix === null ? 'hidden' : ''}>
                         <h3>
                             <QrCode className="mr-2 mb-1 inline-block w-4"/>
                             QRCode:
@@ -261,14 +326,22 @@ const Index = () => {
                             Pix Copia-e-Cola:
                         </h3>
                         <p className="break-words rounded-md border border-emerald-300 p-4 dark:border-emerald-900">
-                            <code
-                                className="relative rounded bg-slate-100 py-[0.2rem] px-[0.3rem] font-mono text-sm font-semibold text-slate-900 dark:bg-slate-800 dark:text-slate-400">
-                                {pix}
-                            </code>
+                            <CampoPix show={comoFunciona} campo={pix?.fields[0]}/>
+                            <CampoPix show={comoFunciona} campo={pix?.fields[1]}
+                                      className="border border-lime-300 text-lime-900 hover:border-lime-400 dark:border-lime-900 dark:text-lime-500 hover:dark:border-lime-800"/>
+                            <CampoPix show={comoFunciona} campo={pix?.fields[2]}/>
+                            <CampoPix show={comoFunciona} campo={pix?.fields[3]}/>
+                            <CampoPix show={comoFunciona} campo={pix?.fields[4]}/>
+                            <CampoPix show={comoFunciona} campo={pix?.fields[5]}
+                                      className="border border-sky-300 text-sky-900 hover:border-sky-400 dark:border-sky-900 dark:text-sky-500 hover:dark:border-sky-800"/>
+                            <CampoPix show={comoFunciona} campo={pix?.fields[6]} className="border border-yellow-300 text-yellow-900 hover:border-yellow-400 dark:border-yellow-900 dark:text-yellow-500 hover:dark:border-yellow-800"/>
+                            <CampoPix show={comoFunciona} campo={pix?.fields[7]} className="border border-pink-300 text-pink-900 hover:border-pink-400 dark:border-pink-900 dark:text-pink-500 hover:dark:border-pink-800"/>
+                            <CampoPix show={comoFunciona} campo={pix?.fields[8]}/>
                         </p>
                         <div className="mt-1 flex items-center">
                             <div className="flex w-full items-center space-x-2">
-                                <Checkbox id="curiosidade"/>
+                                <Checkbox id="curiosidade"
+                                          onCheckedChange={(val) => setComoFunciona(typeof val == "boolean" ? val : false)}/>
                                 <Label htmlFor="curiosidade">
                                     Como funciona?
                                 </Label>
@@ -280,7 +353,7 @@ const Index = () => {
                         </div>
                     </div>
                     <div
-                        className={"rounded-md border border-emerald-300 p-4 dark:border-emerald-900" + (pix === "" ? "" : " hidden")}>
+                        className={`rounded-md border border-emerald-300 p-4 dark:border-emerald-900${pix === null ? '' : ' hidden'}`}>
                         <p>Preencha as informações e clique em <span
                             className="font-bold text-emerald-600">Gerar QRCode</span> para ter seu QRCode e começar a
                             receber Pix :)</p>
