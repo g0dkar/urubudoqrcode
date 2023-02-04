@@ -13,6 +13,8 @@ import {Popover, PopoverContent, PopoverTrigger} from "@/components/ui/popover";
 import {cn} from "@/lib/utils";
 
 const CampoPix = ({show, campo, className = ""}) => {
+    const campoValue = campo?.valueStr || campo?.value
+
     if (!show) {
         return <code
             className="text-md relative bg-slate-100 py-[0.2rem] font-mono text-slate-900 first:rounded-l first:pl-[0.3rem] last:rounded-r last:pr-[0.3rem] dark:bg-slate-800 dark:text-slate-400">
@@ -26,17 +28,29 @@ const CampoPix = ({show, campo, className = ""}) => {
                     " hover:dark:bg-slate-700", className)}>
                 {campo?.computed}
             </PopoverTrigger>
-            <PopoverContent className="w-96 shadow-md">
-                <div className="space-y-2">
-                    <h4 className="text-sm font-semibold">
-                        ID: <span className="font-mono font-semibold">{campo?.id}</span>
-                    </h4>
-                    <h4 className="text-sm">
-                        Descrição do BaCen: <span className="font-semibold">{campo?.bacenDescription}</span>
-                    </h4>
-                    <p className="text-sm">
-                        {campo?.description}
-                    </p>
+            <PopoverContent className="w-80 border border-slate-200 shadow-md dark:border-slate-700">
+                <div className="grid gap-4">
+                    <div className="space-y-2">
+                        <h4 className="font-bold leading-none">{campo?.name}</h4>
+                        <p className="text-xs text-slate-500 dark:text-slate-400">{campo?.description}</p>
+                    </div>
+                    <div className="grid gap-2">
+                        <div className="grid grid-cols-3 items-center gap-4">
+                            <Label htmlFor="pixCampoID">ID</Label>
+                            <Input id="pixCampoID" value={campo?.id} className="col-span-2 h-8" readOnly={true} disabled={true} />
+                        </div>
+                        <div className="grid grid-cols-3 items-center gap-4">
+                            <Label htmlFor="pixCampoTam">Tamanho</Label>
+                            <Input id="pixCampoTam" value={campoValue?.length} className="col-span-2 h-8" readOnly={true} disabled={true} />
+                        </div>
+                        <div className="grid grid-cols-3 items-center gap-4">
+                            <Label htmlFor="pixCampoVal">Valor</Label>
+                            <Input id="pixCampoVal" value={campoValue} className="col-span-2 h-8" readOnly={true} disabled={true} />
+                        </div>
+                    </div>
+                    <div className="space-y-2">
+                        <p className="text-xs italic text-slate-500 dark:text-slate-400">Descrição deste campo segundo o BaCen: {campo?.bacenDescription}</p>
+                    </div>
                 </div>
             </PopoverContent>
         </Popover>
@@ -52,14 +66,6 @@ const Index = () => {
     const [valor, setValor] = useState("0")
     const [semValor, setSemValor] = useState("0")
     const [pix, setPix] = useState(null)
-    // const [tipo, setTipo] = useState("0")
-    // const [chave, setChave] = useState("99602342315")
-    // const [maskChave, setMaskChave] = useState("000.000.000-00")
-    // const [nome, setNome] = useState("Rafael")
-    // const [cidade, setCidade] = useState("Teresina")
-    // const [valor, setValor] = useState("0")
-    // const [semValor, setSemValor] = useState("0")
-    // const [pix, setPix] = useState(null)
     const [comoFunciona, setComoFunciona] = useState(false)
     const chaveRef = useRef(null)
     const valorRef = useRef(null)
@@ -70,6 +76,7 @@ const Index = () => {
             chaveInput.id = "chave"
             chaveInput.className = InputClassNames
             chaveInput.tabIndex = 2
+            chaveInput.placeholder = "Chave Pix (CPF: 000.000.000-00)"
         }
 
         const valorInput = valorRef.current
@@ -79,8 +86,6 @@ const Index = () => {
             valorInput.placeholder = "Valor do Pix"
             valorInput.tabIndex = 6
         }
-
-        selectTipoChave("0")
     }, [])
 
     const selectTipoChave = (selected: string) => {
@@ -138,7 +143,6 @@ const Index = () => {
     const recomecarQRCode = (evt) => {
         evt.preventDefault()
         setPix("")
-        setTipo("0")
         setNome("")
         setCidade("")
         setValor("0")
@@ -229,11 +233,11 @@ const Index = () => {
                         <div className={cn("w-full", comoFunciona ? "rounded outline outline-2" +
                             " outline-offset-2 outline-sky-700" : "")}>
                             <Input type="text" id="nome" placeholder="Nome do(a) Beneficiário(a)" tabIndex={3}
-                                   maxLength={32} value={nome} onChange={onChangeNome}/>
+                                   maxLength={25} value={nome} onChange={onChangeNome}/>
                         </div>
                         <p className="text-sm text-slate-500">
                             <span
-                                className="pr-3 font-medium leading-none text-slate-700 dark:text-slate-300">Tamanho: {nome.length}/32</span>
+                                className="pr-3 font-medium leading-none text-slate-700 dark:text-slate-300">Tamanho: {nome.length}/25</span>
                             Nome da pessoa ou empresa que irá receber o Pix
                         </p>
                     </div>
@@ -318,21 +322,26 @@ const Index = () => {
                             <Pencil className="mr-2 mb-1 inline w-4"/>
                             Pix Copia-e-Cola:
                         </h3>
-                        <p className="break-words rounded-md border border-emerald-300 p-4 dark:border-emerald-900">
+                        <div className="break-words rounded-md border border-emerald-300 p-4 dark:border-emerald-900">
                             <CampoPix show={comoFunciona} campo={pix?.fields[0]}/>
                             <CampoPix show={comoFunciona} campo={pix?.fields[1]}
                                       className="border border-lime-300 text-lime-900 hover:border-lime-400 dark:border-lime-900 dark:text-lime-500 hover:dark:border-lime-800"/>
                             <CampoPix show={comoFunciona} campo={pix?.fields[2]}/>
                             <CampoPix show={comoFunciona} campo={pix?.fields[3]}/>
-                            <CampoPix show={comoFunciona} campo={pix?.fields[4]}/>
-                            <CampoPix show={comoFunciona} campo={pix?.fields[5]}
-                                      className="border border-sky-300 text-sky-900 hover:border-sky-400 dark:border-sky-900 dark:text-sky-500 hover:dark:border-sky-800"/>
-                            <CampoPix show={comoFunciona} campo={pix?.fields[6]}
-                                      className="border border-yellow-300 text-yellow-900 hover:border-yellow-400 dark:border-yellow-900 dark:text-yellow-500 hover:dark:border-yellow-800"/>
-                            <CampoPix show={comoFunciona} campo={pix?.fields[7]}
+                            <CampoPix show={comoFunciona} campo={pix?.fields[4]}
                                       className="border border-pink-300 text-pink-900 hover:border-pink-400 dark:border-pink-900 dark:text-pink-500 hover:dark:border-pink-800"/>
+                            <CampoPix show={comoFunciona} campo={pix?.fields[5]}/>
+                            <CampoPix show={comoFunciona} campo={pix?.fields[6]}
+                                      className="border border-sky-300 text-sky-900 hover:border-sky-400 dark:border-sky-900 dark:text-sky-500 hover:dark:border-sky-800"/>
+                            <CampoPix show={comoFunciona} campo={pix?.fields[7]}
+                                      className="border border-yellow-300 text-yellow-900 hover:border-yellow-400 dark:border-yellow-900 dark:text-yellow-500 hover:dark:border-yellow-800"/>
                             <CampoPix show={comoFunciona} campo={pix?.fields[8]}/>
-                        </p>
+                            <CampoPix show={comoFunciona} campo={pix?.fields[9]}/>
+
+                            <div className={"text-xs mt-2 text-slate-500 dark:text-slate-400" + (!comoFunciona ? " hidden" : "")}>
+                                Cada campo é composto por ID + Tamanho do Valor (sempre 2 dígitos) + Valor. Clique em cada um para saber mais sobre eles!
+                            </div>
+                        </div>
                         <div className="mt-1 flex items-center">
                             <div className="flex w-full items-center space-x-2">
                                 <Checkbox id="curiosidade"
