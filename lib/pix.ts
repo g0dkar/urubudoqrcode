@@ -23,12 +23,16 @@ export default class PixQRCode {
         let val: string
 
         if (typeof field.value === "string") {
-            val = field.value
+            val = this.normalizar(field.value)
         } else {
             val = field.value.reduce((previousValue, currentValue) => previousValue + this.pixField(currentValue), "")
         }
 
         return field.id + (val.length < 10 ? ("0" + val.length) : val.length) + val
+    }
+
+    private normalizar(str: string) {
+        return str.normalize('NFD').replace(/[\u0300-\u036f]/g, "")
     }
 
     pixPayload(): PixField {

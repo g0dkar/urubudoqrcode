@@ -6,7 +6,19 @@ import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "@/c
 import {useEffect, useRef, useState} from "react"
 import {IMaskInput} from "react-imask"
 import {Button, buttonVariants} from "@/components/ui/button"
-import {Building, ChevronsRight, Copy, DollarSign, FormInput, Key, Pencil, QrCode, RefreshCw, User} from "lucide-react"
+import {
+    Building,
+    ChevronsRight,
+    Copy,
+    DollarSign,
+    Download,
+    FormInput,
+    Key,
+    Pencil,
+    QrCode,
+    RefreshCw,
+    User
+} from "lucide-react"
 import PixQRCode from "@/lib/pix"
 import {Checkbox} from "@/components/ui/checkbox"
 import {Popover, PopoverContent, PopoverTrigger} from "@/components/ui/popover";
@@ -335,6 +347,7 @@ const Index = () => {
                             size: "lg",
                             className: "w-full bg-emerald-500 px-8 hover:bg-emerald-600 dark:bg-emerald-500 dark:hover:bg-emerald-600"
                         }))}>
+                            <Download className="mr-2 inline-block w-4"/>
                             Baixar QRCode
                         </a>
 
