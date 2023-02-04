@@ -5,12 +5,14 @@ import {Label} from "@/components/ui/label"
 import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "@/components/ui/select"
 import {useEffect, useRef, useState} from "react"
 import {IMaskInput} from "react-imask"
-import {Button} from "@/components/ui/button"
+import {Button, buttonVariants} from "@/components/ui/button"
 import {Building, ChevronsRight, Copy, DollarSign, FormInput, Key, Pencil, QrCode, RefreshCw, User} from "lucide-react"
 import PixQRCode from "@/lib/pix"
 import {Checkbox} from "@/components/ui/checkbox"
 import {Popover, PopoverContent, PopoverTrigger} from "@/components/ui/popover";
 import {cn} from "@/lib/utils";
+import {io} from "@/lib/qrcode-kotlin";
+import QRCode = io.github.g0dkar.qrcode.QRCode;
 
 const CampoPix = ({show, campo, className = ""}) => {
     const campoValue = campo?.valueStr || campo?.value
@@ -37,19 +39,23 @@ const CampoPix = ({show, campo, className = ""}) => {
                     <div className="grid gap-2">
                         <div className="grid grid-cols-3 items-center gap-4">
                             <Label htmlFor="pixCampoID">ID</Label>
-                            <Input id="pixCampoID" value={campo?.id} className="col-span-2 h-8" readOnly={true} disabled={true} />
+                            <Input id="pixCampoID" value={campo?.id} className="col-span-2 h-8" readOnly={true}
+                                   disabled={true}/>
                         </div>
                         <div className="grid grid-cols-3 items-center gap-4">
                             <Label htmlFor="pixCampoTam">Tamanho</Label>
-                            <Input id="pixCampoTam" value={campoValue?.length} className="col-span-2 h-8" readOnly={true} disabled={true} />
+                            <Input id="pixCampoTam" value={campoValue?.length} className="col-span-2 h-8"
+                                   readOnly={true} disabled={true}/>
                         </div>
                         <div className="grid grid-cols-3 items-center gap-4">
                             <Label htmlFor="pixCampoVal">Valor</Label>
-                            <Input id="pixCampoVal" value={campoValue} className="col-span-2 h-8" readOnly={true} disabled={true} />
+                            <Input id="pixCampoVal" value={campoValue} className="col-span-2 h-8" readOnly={true}
+                                   disabled={true}/>
                         </div>
                     </div>
                     <div className="space-y-2">
-                        <p className="text-xs italic text-slate-500 dark:text-slate-400">Descrição deste campo segundo o BaCen: {campo?.bacenDescription}</p>
+                        <p className="text-xs italic text-slate-500 dark:text-slate-400">Descrição deste campo segundo o
+                            BaCen: {campo?.bacenDescription}</p>
                     </div>
                 </div>
             </PopoverContent>
@@ -66,6 +72,7 @@ const Index = () => {
     const [valor, setValor] = useState("0")
     const [semValor, setSemValor] = useState("0")
     const [pix, setPix] = useState(null)
+    const [qrcodeDataUrl, setQrcodeDataUrl] = useState("")
     const [comoFunciona, setComoFunciona] = useState(false)
     const chaveRef = useRef(null)
     const valorRef = useRef(null)
@@ -137,17 +144,22 @@ const Index = () => {
         const codigoPix = pixQrCode.codigo()
 
         setPix(codigoPix)
-        //const qrCode = new QRCode(codigoPix).render()
+        const result = new QRCode(codigoPix.pix).render()
+        const dataURL = result.toDataURL()
+        setQrcodeDataUrl(dataURL)
     }
 
     const recomecarQRCode = (evt) => {
         evt.preventDefault()
-        setPix("")
+        setPix(null)
         setNome("")
         setCidade("")
         setValor("0")
         setSemValor("0")
+        setQrcodeDataUrl("")
+        setComoFunciona(false)
         selectTipoChave("0")
+        chaveRef.current.focus()
     }
 
     const copiarPix = (evt) => {
@@ -314,7 +326,19 @@ const Index = () => {
                             QRCode:
                         </h3>
 
-                        <p className="my-4 border-b border-slate-300 py-2 text-center text-xs italic text-slate-600 dark:border-slate-600 dark:text-slate-400">
+                        <div className="my-2 rounded bg-white p-4 text-black">
+                            <img src={qrcodeDataUrl} className="max-w-full" width={625} height={625} alt="QRCode do Pix"/>
+                        </div>
+
+                        <a href={qrcodeDataUrl} download="qrcode.png" className={cn(buttonVariants({
+                            variant: "default",
+                            size: "lg",
+                            className: "w-full bg-emerald-500 px-8 hover:bg-emerald-600 dark:bg-emerald-500 dark:hover:bg-emerald-600"
+                        }))}>
+                            Baixar QRCode
+                        </a>
+
+                        <p className="py-4 text-center text-xs italic text-slate-600 dark:text-slate-400">
                             Dica: Para testar, abra o aplicativo do seu banco e leia esse QRCode!
                         </p>
 
@@ -338,8 +362,10 @@ const Index = () => {
                             <CampoPix show={comoFunciona} campo={pix?.fields[8]}/>
                             <CampoPix show={comoFunciona} campo={pix?.fields[9]}/>
 
-                            <div className={"text-xs mt-2 text-slate-500 dark:text-slate-400" + (!comoFunciona ? " hidden" : "")}>
-                                Cada campo é composto por ID + Tamanho do Valor (sempre 2 dígitos) + Valor. Clique em cada um para saber mais sobre eles!
+                            <div
+                                className={"text-xs mt-2 text-slate-500 dark:text-slate-400" + (!comoFunciona ? " hidden" : "")}>
+                                Cada campo é composto por ID + Tamanho do Valor (sempre 2 dígitos) + Valor. Clique em
+                                cada um para saber mais sobre eles!
                             </div>
                         </div>
                         <div className="mt-1 flex items-center">
