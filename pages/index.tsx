@@ -44,7 +44,6 @@ const CampoPix = ({show, campo, className = ""}) => {
 }
 
 const Index = () => {
-    /*
     const [tipo, setTipo] = useState("0")
     const [chave, setChave] = useState("")
     const [maskChave, setMaskChave] = useState("000.000.000-00")
@@ -52,17 +51,15 @@ const Index = () => {
     const [cidade, setCidade] = useState("")
     const [valor, setValor] = useState("0")
     const [semValor, setSemValor] = useState("0")
-    const [pix, setPix] = useState("")
-    */
-    const x = true
-    const [tipo, setTipo] = useState("0")
-    const [chave, setChave] = useState("99602342315")
-    const [maskChave, setMaskChave] = useState("000.000.000-00")
-    const [nome, setNome] = useState("Rafael")
-    const [cidade, setCidade] = useState("Teresina")
-    const [valor, setValor] = useState("0")
-    const [semValor, setSemValor] = useState("0")
     const [pix, setPix] = useState(null)
+    // const [tipo, setTipo] = useState("0")
+    // const [chave, setChave] = useState("99602342315")
+    // const [maskChave, setMaskChave] = useState("000.000.000-00")
+    // const [nome, setNome] = useState("Rafael")
+    // const [cidade, setCidade] = useState("Teresina")
+    // const [valor, setValor] = useState("0")
+    // const [semValor, setSemValor] = useState("0")
+    // const [pix, setPix] = useState(null)
     const [comoFunciona, setComoFunciona] = useState(false)
     const chaveRef = useRef(null)
     const valorRef = useRef(null)
@@ -134,13 +131,6 @@ const Index = () => {
 
         setPix(codigoPix)
         //const qrCode = new QRCode(codigoPix).render()
-    }
-
-    if (x) {
-        // eslint-disable-next-line react-hooks/rules-of-hooks
-        useEffect(() => {
-            gerarQRCode(null)
-        }, [])
     }
 
     const recomecarQRCode = (evt) => {
@@ -220,7 +210,8 @@ const Index = () => {
                                 </span>
                                 <span className={`w-full${tipo === "2" ? "" : " hidden"}`}>
                                     <Input type="email" id="chave2" value={chave} onChange={onChangeChave}
-                                           placeholder="Chave Pix (seu.endereco@de-email.com)" tabIndex={2} maxLength={70}/>
+                                           placeholder="Chave Pix (seu.endereco@de-email.com)" tabIndex={2}
+                                           maxLength={70}/>
                                 </span>
                             </div>
                         </div>
@@ -334,8 +325,10 @@ const Index = () => {
                             <CampoPix show={comoFunciona} campo={pix?.fields[4]}/>
                             <CampoPix show={comoFunciona} campo={pix?.fields[5]}
                                       className="border border-sky-300 text-sky-900 hover:border-sky-400 dark:border-sky-900 dark:text-sky-500 hover:dark:border-sky-800"/>
-                            <CampoPix show={comoFunciona} campo={pix?.fields[6]} className="border border-yellow-300 text-yellow-900 hover:border-yellow-400 dark:border-yellow-900 dark:text-yellow-500 hover:dark:border-yellow-800"/>
-                            <CampoPix show={comoFunciona} campo={pix?.fields[7]} className="border border-pink-300 text-pink-900 hover:border-pink-400 dark:border-pink-900 dark:text-pink-500 hover:dark:border-pink-800"/>
+                            <CampoPix show={comoFunciona} campo={pix?.fields[6]}
+                                      className="border border-yellow-300 text-yellow-900 hover:border-yellow-400 dark:border-yellow-900 dark:text-yellow-500 hover:dark:border-yellow-800"/>
+                            <CampoPix show={comoFunciona} campo={pix?.fields[7]}
+                                      className="border border-pink-300 text-pink-900 hover:border-pink-400 dark:border-pink-900 dark:text-pink-500 hover:dark:border-pink-800"/>
                             <CampoPix show={comoFunciona} campo={pix?.fields[8]}/>
                         </p>
                         <div className="mt-1 flex items-center">
