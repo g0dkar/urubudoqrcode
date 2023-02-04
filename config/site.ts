@@ -15,9 +15,9 @@ export const siteConfig: SiteConfig = {
             title: "Início",
             href: "/",
         },
-        {
-            title: "Como funciona?",
-            href: "/como-funciona",
-        },
+        // {
+        //     title: "Como funciona?",
+        //     href: "/como-funciona",
+        // },
     ]
 }
