@@ -1,78 +1,162 @@
-# next-template
+# QRCode do Pix / Urubu do QRCode!
 
-A Next.js 13 template for building apps with Radix UI and Tailwind CSS.
+![Urubu do QRCode](public/images/urubu-do-qrcode.png "Logo do Projeto")
 
-## Features
+Este é um projeto de final de semana que fiz para gerar QRCodes para recebimento de pagamentos Pix.
 
-- Radix UI Primitives
-- Tailwind CSS
-- Fonts with `@next/font`
-- Icons from [Lucide](https://lucide.dev)
-- Dark mode with `next-themes`
-- Automatic import sorting with `@ianvs/prettier-plugin-sort-imports`
+## Partes interessantes:
 
-## Tailwind CSS Features
+- [`pix.ts`](lib/pix.ts): Arquivo que define a classe `PixField`, a qual é usada para compor o código Pix.
+- [`crc16.ts`](lib/crc16.ts): Implementação do algorítimo CRC16 acompanhado da tabela de polinômio `0x1021` e
+  inicializado com `0xFFFF`. Esses valores são os valores requeridos pelo Banco Central (BaCen) para se calcular os
+  dígitos verificadores do Pix.
 
-- Class merging with `taiwind-merge`
-- Animation with `tailwindcss-animate`
-- Conditional classes with `clsx`
-- Variants with `class-variance-authority`
-- Automatic class sorting with `eslint-plugin-tailwindcss`
+## Links e Referências
 
-## Import Sort
+- Gerador de QRCode: [QRCode-Kotlin](https://qrcodekotlin.com)
+- [Documentação do BaCen](https://www.bcb.gov.br/content/estabilidadefinanceira/pix/Regulamento_Pix/II_ManualdePadroesparaIniciacaodoPix.pdf)
+- [Shadcn UI](https://ui.shadcn.com/)
 
-The starter comes with `@ianvs/prettier-plugin-sort-imports` for automatically sort your imports.
+## Agradecimentos
 
-### Input
+Um imenso agradecimento ao mano @jaffrito, que não só deu a ideia como todo o apoio, ajudou a testar e divulgar esse
+projeto :)
 
-```tsx
-import * as React from "react"
-import Link from "next/link"
+## Licença
 
-import { siteConfig } from "@/config/site"
-import { buttonVariants } from "@/components/ui/button"
-import "@/styles/globals.css"
-import { twMerge } from "tailwind-merge"
+Este código é licenciado via [MIT License](https://rafaellins.mit-license.org/2021/).
 
-import { NavItem } from "@/types/nav"
-import { cn } from "@/lib/utils"
-```
+[//]: # (# next-template)
 
-### Output
+[//]: # ()
+[//]: # (A Next.js 13 template for building apps with Radix UI and Tailwind CSS.)
 
-```tsx
-import * as React from "react"
-// React is always first.
-import Link from "next/link"
-// Followed by next modules.
-import { twMerge } from "tailwind-merge"
+[//]: # ()
+[//]: # (## Features)
 
-// Followed by third-party modules
-// Space
-import "@/styles/globals.css"
-// styles
-import { NavItem } from "@/types/nav"
-// types
-import { siteConfig } from "@/config/site"
-// config
-import { cn } from "@/lib/utils"
-// lib
-import { buttonVariants } from "@/components/ui/button"
+[//]: # ()
+[//]: # (- Radix UI Primitives)
 
-// components
-```
+[//]: # (- Tailwind CSS)
 
-### Class Merging
+[//]: # (- Fonts with `@next/font`)
 
-The `cn` util handles conditional classes and class merging.
+[//]: # (- Icons from [Lucide]&#40;https://lucide.dev&#41;)
 
-### Input
+[//]: # (- Dark mode with `next-themes`)
 
-```ts
-cn("px-2 bg-slate-100 py-2 bg-slate-200")
-// Outputs `p-2 bg-slate-200`
-```
+[//]: # (- Automatic import sorting with `@ianvs/prettier-plugin-sort-imports`)
 
-## License
+[//]: # ()
+[//]: # (## Tailwind CSS Features)
 
-Licensed under the [MIT license](https://github.com/shadcn/ui/blob/main/LICENSE.md).
+[//]: # ()
+[//]: # (- Class merging with `taiwind-merge`)
+
+[//]: # (- Animation with `tailwindcss-animate`)
+
+[//]: # (- Conditional classes with `clsx`)
+
+[//]: # (- Variants with `class-variance-authority`)
+
+[//]: # (- Automatic class sorting with `eslint-plugin-tailwindcss`)
+
+[//]: # ()
+[//]: # (## Import Sort)
+
+[//]: # ()
+[//]: # (The starter comes with `@ianvs/prettier-plugin-sort-imports` for automatically sort your imports.)
+
+[//]: # ()
+[//]: # (### Input)
+
+[//]: # ()
+[//]: # (```tsx)
+
+[//]: # (import * as React from "react")
+
+[//]: # (import Link from "next/link")
+
+[//]: # ()
+[//]: # (import { siteConfig } from "@/config/site")
+
+[//]: # (import { buttonVariants } from "@/components/ui/button")
+
+[//]: # (import "@/styles/globals.css")
+
+[//]: # (import { twMerge } from "tailwind-merge")
+
+[//]: # ()
+[//]: # (import { NavItem } from "@/types/nav")
+
+[//]: # (import { cn } from "@/lib/utils")
+
+[//]: # (```)
+
+[//]: # ()
+[//]: # (### Output)
+
+[//]: # ()
+[//]: # (```tsx)
+
+[//]: # (import * as React from "react")
+
+[//]: # (// React is always first.)
+
+[//]: # (import Link from "next/link")
+
+[//]: # (// Followed by next modules.)
+
+[//]: # (import { twMerge } from "tailwind-merge")
+
+[//]: # ()
+[//]: # (// Followed by third-party modules)
+
+[//]: # (// Space)
+
+[//]: # (import "@/styles/globals.css")
+
+[//]: # (// styles)
+
+[//]: # (import { NavItem } from "@/types/nav")
+
+[//]: # (// types)
+
+[//]: # (import { siteConfig } from "@/config/site")
+
+[//]: # (// config)
+
+[//]: # (import { cn } from "@/lib/utils")
+
+[//]: # (// lib)
+
+[//]: # (import { buttonVariants } from "@/components/ui/button")
+
+[//]: # ()
+[//]: # (// components)
+
+[//]: # (```)
+
+[//]: # ()
+[//]: # (### Class Merging)
+
+[//]: # ()
+[//]: # (The `cn` util handles conditional classes and class merging.)
+
+[//]: # ()
+[//]: # (### Input)
+
+[//]: # ()
+[//]: # (```ts)
+
+[//]: # (cn&#40;"px-2 bg-slate-100 py-2 bg-slate-200"&#41;)
+
+[//]: # (// Outputs `p-2 bg-slate-200`)
+
+[//]: # (```)
+
+[//]: # ()
+[//]: # (## License)
+
+[//]: # ()
+[//]: # (Licensed under the [MIT license]&#40;https://github.com/shadcn/ui/blob/main/LICENSE.md&#41;.)

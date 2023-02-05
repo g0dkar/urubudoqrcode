@@ -28,11 +28,21 @@ export default class PixQRCode {
             val = field.value.reduce((previousValue, currentValue) => previousValue + this.pixField(currentValue), "")
         }
 
-        return field.id + (val.length < 10 ? ("0" + val.length) : val.length) + val
+        return field.id + this.zeroPad(val, 2) + val
     }
 
     private normalizar(str: string) {
         return str.normalize('NFD').replace(/[\u0300-\u036f]/g, "")
+    }
+
+    private zeroPad(str: string, size: number) {
+        const padSize = size - str.length
+
+        if (padSize > 0) {
+            return "0".repeat(padSize).concat(str)
+        } else {
+            return str
+        }
     }
 
     pixPayload(): PixField {
@@ -248,7 +258,7 @@ export default class PixQRCode {
         }
 
         let pix: string = codigo.fields.reduce((previousValue, currentValue) => previousValue + currentValue.computed, "") + this.CRC_PREFIX
-        const crcValue = crc16(pix).toString(16).toUpperCase()
+        const crcValue = this.zeroPad(crc16(pix).toString(16).toUpperCase(), 4)
 
         codigo.fields.push(this.crc(crcValue))
         codigo.crc = crcValue
