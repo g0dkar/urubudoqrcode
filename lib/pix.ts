@@ -155,7 +155,8 @@ export default class PixQRCode {
             id: "59",
             name: "Recebedor - Nome",
             value: this.nome,
-            description: "Nome da Pessoa ou Empresa que Receberá o Pix (não precisa ser em maiúsculas)",
+            description: "Nome da Pessoa ou Empresa que Receberá o Pix (não precisa ser em maiúsculas; deve estar sem" +
+                " acentos)",
             bacenDescription: "Merchant Name (obrigatório)",
             computed: "",
         }
@@ -170,7 +171,8 @@ export default class PixQRCode {
             id: "60",
             name: "Recebedor - Cidade",
             value: this.cidade,
-            description: "Cidade da Pessoa ou Empresa que Receberá o Pix (não precisa ser em maiúsculas)",
+            description: "Cidade da Pessoa ou Empresa que Receberá o Pix (não precisa ser em maiúsculas; deve estar" +
+                " sem acentos)",
             bacenDescription: "Merchant City (obrigatório)",
             computed: "",
         }
@@ -189,7 +191,7 @@ export default class PixQRCode {
                 {
                     id: "05",
                     name: "TxID",
-                    value: "*",
+                    value: "***",
                     description: "ID da Transação a ser usado por um sistema do Recebedor",
                     bacenDescription: "Reference Label",
                     computed: "",

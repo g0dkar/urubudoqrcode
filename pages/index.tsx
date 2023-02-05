@@ -21,9 +21,9 @@ import {
 } from "lucide-react"
 import PixQRCode from "@/lib/pix"
 import {Checkbox} from "@/components/ui/checkbox"
-import {Popover, PopoverContent, PopoverTrigger} from "@/components/ui/popover";
-import {cn} from "@/lib/utils";
-import {io} from "@/lib/qrcode-kotlin";
+import {Popover, PopoverContent, PopoverTrigger} from "@/components/ui/popover"
+import {cn} from "@/lib/utils"
+import {io} from "@/lib/qrcode-kotlin"
 import QRCode = io.github.g0dkar.qrcode.QRCode;
 
 const CampoPix = ({show, campo, className = ""}) => {
@@ -86,6 +86,7 @@ const Index = () => {
     const [pix, setPix] = useState(null)
     const [qrcodeDataUrl, setQrcodeDataUrl] = useState("")
     const [comoFunciona, setComoFunciona] = useState(false)
+    const [btnCopiarTxt, setBtnCopiarTxt] = useState("Copiar")
     const chaveRef = useRef(null)
     const valorRef = useRef(null)
 
@@ -171,12 +172,16 @@ const Index = () => {
         setQrcodeDataUrl("")
         setComoFunciona(false)
         selectTipoChave("0")
+        setBtnCopiarTxt("Copiar")
         chaveRef.current.focus()
     }
 
     const copiarPix = (evt) => {
         evt.preventDefault()
-        console.log("Copiar pix...")
+        navigator.clipboard.writeText(pix.pix).then(() => {
+            setBtnCopiarTxt("Copiado!")
+            setTimeout(() => setBtnCopiarTxt("Copiar"), 5000)
+        })
     }
 
     return <Layout>
@@ -339,7 +344,8 @@ const Index = () => {
                         </h3>
 
                         <div className="my-2 rounded bg-white p-4 text-black">
-                            <img src={qrcodeDataUrl} className="max-w-full" width={625} height={625} alt="QRCode do Pix"/>
+                            <img src={qrcodeDataUrl} className="max-w-full" width={625} height={625}
+                                 alt="QRCode do Pix"/>
                         </div>
 
                         <a href={qrcodeDataUrl} download="qrcode.png" className={cn(buttonVariants({
@@ -391,7 +397,7 @@ const Index = () => {
                             </div>
                             <Button variant="outline" className="px-4" onClick={copiarPix} size="sm">
                                 <Copy className="mr-2 w-4"/>
-                                Copiar
+                                {btnCopiarTxt}
                             </Button>
                         </div>
                     </div>
