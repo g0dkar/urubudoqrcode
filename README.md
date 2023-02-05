@@ -4,6 +4,8 @@
 
 Este é um projeto de final de semana que fiz para gerar QRCodes para recebimento de pagamentos Pix.
 
+>**O nome do repositório é uma brincadeira com o meme do Urubu do Pix... caso não tenha dado para notar :P**
+
 ## Partes interessantes:
 
 - [`pix.ts`](lib/pix.ts): Arquivo que define a classe `PixField`, a qual é usada para compor o código Pix.
