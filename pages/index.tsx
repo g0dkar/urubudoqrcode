@@ -336,11 +336,8 @@ const Index = () => {
                             <div
                                 className={`mt-2 flex max-w-[300px] items-center space-x-4 rounded-md border border-slate-300 p-4 dark:border-slate-600${semValor === "0" ? " hidden" : ""}`}>
                                 <Label htmlFor="valor">Valor:</Label>
-                                <CurrencyInput value={valor} customInput={Input} disabled={gerandoQrCode} onValueChange={(val) => setValor(Number(val.value/100))}/>
-                                {/*<NumericFormat value={valor} mask={Number} unmask={true} scale={2} signed={false} min={0}*/}
-                                {/*            max={99999} thousandsSeparator="." padFractionalZeros={true}*/}
-                                {/*            inputRef={valorRef} normalizeZeros={false}*/}
-                                {/*            onAccept={(value: string) => setValor(value)}/>*/}
+                                <CurrencyInput value={valor} customInput={Input} disabled={gerandoQrCode}
+                                               onValueChange={(val) => setValor(Number(val.value / 100))}/>
                             </div>
                         </div>
                     </div>
