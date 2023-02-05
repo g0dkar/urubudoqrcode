@@ -148,7 +148,7 @@ const Index = () => {
         pixQrCode.chave = chave()
         pixQrCode.nome = nome
         pixQrCode.cidade = cidade
-        pixQrCode.valor = semValor === "0" ? null : Number(valor)
+        pixQrCode.valor = semValor === "0" ? null : (valor / 100)
 
         const codigoPix = pixQrCode.codigo()
 
