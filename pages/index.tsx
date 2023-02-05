@@ -290,7 +290,7 @@ const Index = () => {
                         </div>
                         <p className="text-sm text-slate-500">
                             <span
-                                className="pr-3 font-medium leading-none text-slate-700 dark:text-slate-300">Tamanho: {chave().length}/{chaveMaxSize()}</span>
+                                className="pr-3 font-medium leading-none text-slate-700 dark:text-slate-300">Tamanho: {chave().length - (tipo === "3" || tipo === "4" ? 3 : 0)}/{chaveMaxSize()}</span>
                             Chave Pix que irá receber a transferência.</p>
                     </div>
 
@@ -355,7 +355,7 @@ const Index = () => {
                                 className={`mt-2 flex max-w-[300px] items-center space-x-4 rounded-md border border-slate-300 p-4 dark:border-slate-600${semValor === "0" ? " hidden" : ""}`}>
                                 <Label htmlFor="valor">Valor:</Label>
                                 <CurrencyInput value={valor} customInput={Input} disabled={gerandoQrCode}
-                                               onValueChange={(val) => setValor(Number(val.value / 100))}/>
+                                               onValueChange={(val) => setValor(Number(val.value))}/>
                             </div>
                         </div>
                     </div>
