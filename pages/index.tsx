@@ -114,6 +114,24 @@ const Index = () => {
         return ""
     }
 
+    const chaveMaxSize = (): number => {
+        if (tipo === "0") {
+            return 11
+        } else if (tipo === "1") {
+            return 14
+        } else if (tipo === "2") {
+            return 11
+        } else if (tipo === "3") {
+            return 10
+        } else if (tipo === "4") {
+            return 70
+        } else if (tipo === "5") {
+            return 70
+        }
+
+        return 0
+    }
+
     const gerarQRCode = (evt) => {
         if (evt) {
             evt.preventDefault()
@@ -272,7 +290,7 @@ const Index = () => {
                         </div>
                         <p className="text-sm text-slate-500">
                             <span
-                                className="pr-3 font-medium leading-none text-slate-700 dark:text-slate-300">Tamanho: {nome.length}/25</span>
+                                className="pr-3 font-medium leading-none text-slate-700 dark:text-slate-300">Tamanho: {chave().length}/{chaveMaxSize()}</span>
                             Chave Pix que irá receber a transferência.</p>
                     </div>
 
