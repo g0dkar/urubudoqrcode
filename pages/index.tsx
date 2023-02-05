@@ -102,11 +102,11 @@ const Index = () => {
         } else if (tipo === "1") {
             return chaveCnpj
         } else if (tipo === "2") {
-            return "+55" + chaveCelular
-        } else if (tipo === "3") {
-            return "+55" + chaveFixo
-        } else if (tipo === "4") {
             return chaveEmail
+        } else if (tipo === "3") {
+            return "+55" + chaveCelular
+        } else if (tipo === "4") {
+            return "+55" + chaveFixo
         } else if (tipo === "5") {
             return chaveAleatorio
         }
@@ -120,11 +120,11 @@ const Index = () => {
         } else if (tipo === "1") {
             return 14
         } else if (tipo === "2") {
-            return 11
-        } else if (tipo === "3") {
-            return 10
-        } else if (tipo === "4") {
             return 70
+        } else if (tipo === "3") {
+            return 11
+        } else if (tipo === "4") {
+            return 10
         } else if (tipo === "5") {
             return 70
         }
@@ -261,24 +261,24 @@ const Index = () => {
                                                    customInput={Input} disabled={gerandoQrCode}/>
                                     : <></>}
                                 {tipo === "2" ?
+                                    <Input type="email" id="chave" value={chaveEmail}
+                                           onChange={(evt) => setChaveEmail(evt.target.value)}
+                                           placeholder="Chave Pix - seu.endereco@de-email.com" tabIndex={2}
+                                           maxLength={70} disabled={gerandoQrCode}/>
+                                    : <></>}
+                                {tipo === "3" ?
                                     <PatternFormat value={chaveCelular} format="(##) #####-####" mask="_"
                                                    valueIsNumericString id="chave" tabIndex={2}
                                                    placeholder="Chave Pix - (00) 00000-0000"
                                                    onValueChange={(values) => setChaveCelular(values.value)}
                                                    customInput={Input} disabled={gerandoQrCode}/>
                                     : <></>}
-                                {tipo === "3" ?
+                                {tipo === "4" ?
                                     <PatternFormat value={chaveFixo} format="(##) ####-####" mask="_"
                                                    valueIsNumericString id="chave" tabIndex={2}
                                                    placeholder="Chave Pix - (00) 0000-0000"
                                                    onValueChange={(values) => setChaveFixo(values.value)}
                                                    customInput={Input} disabled={gerandoQrCode}/>
-                                    : <></>}
-                                {tipo === "4" ?
-                                    <Input type="email" id="chave" value={chaveEmail}
-                                           onChange={(evt) => setChaveEmail(evt.target.value)}
-                                           placeholder="Chave Pix - seu.endereco@de-email.com" tabIndex={2}
-                                           maxLength={70} disabled={gerandoQrCode}/>
                                     : <></>}
                                 {tipo === "5" ?
                                     <Input type="text" id="chave" value={chaveAleatorio}

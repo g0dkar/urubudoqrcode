@@ -19,8 +19,11 @@ Este é um projeto de final de semana que fiz para gerar QRCodes para recebiment
 
 ## Agradecimentos
 
-Um imenso agradecimento ao mano @jaffrito, que não só deu a ideia como todo o apoio, ajudou a testar e divulgar esse
-projeto :)
+- **Um imenso agradecimento ao mano @jaffrito, que não só deu a ideia como todo o apoio, ajudou a testar e divulgar esse
+projeto :)**
+- @filiperaiz - Por ter ajudado com seu projeto [Roots Design System](https://github.com/filiperaiz/roots-ds),
+  ajudou bastante com máscaras para valor, telefone, etc.
+- @Marlysson - Ajudou testando
 
 ## Licença
 
