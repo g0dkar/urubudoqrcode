@@ -157,7 +157,7 @@ export default class PixQRCode {
         const field = {
             id: "54",
             name: "Valor",
-            value: this.valor === null ? "0" : this.valor.toFixed(2),
+            value: this.valor === null ? "0" : (this.valor / 100).toFixed(2),
             description: "Valor da transação. Se este campo for omitido ou o valor for \"0\", isso significa que o" +
                 " recebedor expressou que não informou um valor para a transação.",
             bacenDescription: "Transaction Amount (opcional)",
