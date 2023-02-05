@@ -1,10 +1,9 @@
 import Head from "next/head"
 import {Layout} from "@/components/layout"
-import {Input, InputClassNames} from "@/components/ui/input"
+import {Input} from "@/components/ui/input"
 import {Label} from "@/components/ui/label"
 import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "@/components/ui/select"
-import {useEffect, useRef, useState} from "react"
-import {IMaskInput} from "react-imask"
+import {useState} from "react"
 import {Button, buttonVariants} from "@/components/ui/button"
 import {
     Building,
@@ -24,6 +23,8 @@ import {Checkbox} from "@/components/ui/checkbox"
 import {Popover, PopoverContent, PopoverTrigger} from "@/components/ui/popover"
 import {cn} from "@/lib/utils"
 import {io} from "@/lib/qrcode-kotlin"
+import {PatternFormat} from "react-number-format";
+import {CurrencyInput} from "@/components/ui/currency-input";
 import QRCode = io.github.g0dkar.qrcode.QRCode;
 
 const CampoPix = ({show, campo, className = ""}) => {
@@ -77,68 +78,40 @@ const CampoPix = ({show, campo, className = ""}) => {
 
 const Index = () => {
     const [tipo, setTipo] = useState("0")
-    const [chaveCpfCnpj, setChaveCpfCnpj] = useState("0")
+
+    const [chaveCpf, setChaveCpf] = useState("")
+    const [chaveCnpj, setChaveCnpj] = useState("")
+    const [chaveCelular, setChaveCelular] = useState("")
+    const [chaveFixo, setChaveFixo] = useState("")
     const [chaveEmail, setChaveEmail] = useState("")
     const [chaveAleatorio, setChaveAleatorio] = useState("")
-    const [maskChave, setMaskChave] = useState("000.000.000-00")
+
     const [nome, setNome] = useState("")
     const [cidade, setCidade] = useState("")
-    const [valor, setValor] = useState("0")
+    const [valor, setValor] = useState(0.00)
     const [semValor, setSemValor] = useState("0")
     const [pix, setPix] = useState(null)
     const [qrcodeDataUrl, setQrcodeDataUrl] = useState("")
     const [comoFunciona, setComoFunciona] = useState(false)
     const [btnCopiarTxt, setBtnCopiarTxt] = useState("Copiar")
     const [gerandoQrCode, setGerandoQrCode] = useState(false)
-    const chaveRef = useRef(null)
-    const valorRef = useRef(null)
 
-    useEffect(() => {
-        const chaveInput = chaveRef.current
-        if (chaveInput) {
-            chaveInput.id = "chave"
-            chaveInput.className = InputClassNames
-            chaveInput.tabIndex = 2
-            chaveInput.placeholder = "Chave Pix (CPF: 000.000.000-00)"
+    const chave = () => {
+        if (tipo === "0") {
+            return chaveCpf
+        } else if (tipo === "1") {
+            return chaveCnpj
+        } else if (tipo === "2") {
+            return "+55" + chaveCelular
+        } else if (tipo === "3") {
+            return "+55" + chaveFixo
+        } else if (tipo === "4") {
+            return chaveEmail
+        } else if (tipo === "5") {
+            return chaveAleatorio
         }
 
-        const valorInput = valorRef.current
-        if (valorInput) {
-            valorInput.id = "valor"
-            valorInput.className = InputClassNames
-            valorInput.placeholder = "Valor do Pix"
-            valorInput.tabIndex = 6
-        }
-    }, [])
-
-    const selectTipoChave = (selected: string) => {
-        setTipo(selected)
-        setChave("")
-
-        if (selected === "1") {
-            setMaskChave("00.000.000/0000-00")
-            chaveRef.current.placeholder = "Chave Pix (CNPJ: 00.000.000/0000-00)"
-        } else if (selected === "3") {
-            setMaskChave("(00) [0]0000-0000")
-            chaveRef.current.placeholder = "Chave Pix (Telefone Celular ou Fixo)"
-        } else {
-            setMaskChave("000.000.000-00")
-            chaveRef.current.placeholder = "Chave Pix (CPF: 000.000.000-00)"
-        }
-    }
-
-    const onChangeNome = (evt) => {
-        evt.preventDefault()
-        setNome(evt.target.value)
-    }
-
-    const onChangeCidade = (evt) => {
-        evt.preventDefault()
-        setCidade(evt.target.value)
-    }
-
-    const selectSemValor = (selected: string) => {
-        setSemValor(selected)
+        return ""
     }
 
     const gerarQRCode = (evt) => {
@@ -154,7 +127,7 @@ const Index = () => {
 
     const executarGeracao = () => {
         const pixQrCode = new PixQRCode()
-        pixQrCode.chave = (tipo === "3" ? "+55" : "") + chave
+        pixQrCode.chave = chave()
         pixQrCode.nome = nome
         pixQrCode.cidade = cidade
         pixQrCode.valor = semValor === "0" ? null : Number(valor)
@@ -170,17 +143,28 @@ const Index = () => {
     }
 
     const recomecarQRCode = (evt) => {
-        evt.preventDefault()
-        setPix(null)
+        if (evt) {
+            evt.preventDefault()
+        }
+
+        setTipo("0")
+
+        setChaveCpf("")
+        setChaveCnpj("")
+        setChaveCelular("")
+        setChaveFixo("")
+        setChaveEmail("")
+        setChaveAleatorio("")
+
         setNome("")
         setCidade("")
-        setValor("0")
+        setValor(0.00)
         setSemValor("0")
+        setPix(null)
         setQrcodeDataUrl("")
         setComoFunciona(false)
-        selectTipoChave("0")
         setBtnCopiarTxt("Copiar")
-        chaveRef.current.focus()
+        setGerandoQrCode(false)
     }
 
     const copiarPix = (evt) => {
@@ -222,12 +206,12 @@ const Index = () => {
                     </h2>
 
                     <div className="grid w-full items-center gap-1.5">
-                        <Label htmlFor={`chave${tipo === "2" || tipo === "4" ? tipo : ""}`} className="text-md">
+                        <Label htmlFor="chave" className="text-md">
                             <Key className="mb-1 mr-1 inline-block w-4"/>
                             Chave Pix <span className="text-sm text-slate-500 dark:text-slate-400">(obrigatório)</span></Label>
                         <div
                             className="flex w-full flex-col items-center space-y-2 md:flex-row md:space-x-2 md:space-y-0">
-                            <Select value={tipo} onValueChange={selectTipoChave}>
+                            <Select value={tipo} onValueChange={(selected) => setTipo(selected)}>
                                 <SelectTrigger className="w-full sm:w-[200px]" tabIndex={1}>
                                     <SelectValue placeholder="Tipo de Chave"/>
                                 </SelectTrigger>
@@ -235,27 +219,55 @@ const Index = () => {
                                     <SelectItem value="0">CPF</SelectItem>
                                     <SelectItem value="1">CNPJ</SelectItem>
                                     <SelectItem value="2">E-mail</SelectItem>
-                                    <SelectItem value="3">Telefone</SelectItem>
-                                    <SelectItem value="4">Aleatória</SelectItem>
+                                    <SelectItem value="3">Celular</SelectItem>
+                                    <SelectItem value="4">Telefone Fixo</SelectItem>
+                                    <SelectItem value="5">Aleatória</SelectItem>
                                 </SelectContent>
                             </Select>
 
                             <div className={cn("w-full", comoFunciona ? "rounded outline outline-2" +
                                 " outline-offset-2 outline-lime-700" : "")}>
-                                <span className={`w-full${tipo === "2" || tipo === "4" ? " hidden" : ""}`}>
-                                    <IMaskInput value={chave} mask={maskChave} unmask={true}
-                                                onAccept={(value: string) => setChave(value)} inputRef={chaveRef}/>
-                                </span>
-                                <span className={`w-full${tipo === "4" ? "" : " hidden"}`}>
-                                    <Input type="text" id="chave4" value={chaveAleatorio} onChange={(evt) => setChaveAleatorio(evt.target.value)}
-                                           placeholder="Chave Pix (Chave Aleatória)" tabIndex={2} maxLength={70}
-                                           disabled={gerandoQrCode}/>
-                                </span>
-                                <span className={`w-full${tipo === "2" ? "" : " hidden"}`}>
-                                    <Input type="email" id="chave2" value={chaveEmail} onChange={(evt) => setChaveEmail(evt.target.value)}
-                                           placeholder="Chave Pix (seu.endereco@de-email.com)" tabIndex={2}
+
+                                {tipo === "0" ?
+                                    <PatternFormat value={chaveCpf} format="###.###.###-##" mask="_" id="chave"
+                                                   tabIndex={2} valueIsNumericString
+                                                   placeholder="Chave Pix - 000.000.000-00"
+                                                   onValueChange={(values) => setChaveCpf(values.value)}
+                                                   customInput={Input} disabled={gerandoQrCode}/>
+                                    : <></>}
+                                {tipo === "1" ?
+                                    <PatternFormat value={chaveCnpj} format="##.###.###/####-##" mask="_"
+                                                   valueIsNumericString id="chave" tabIndex={2}
+                                                   placeholder="Chave Pix - 00.000.000/0000-00"
+                                                   onValueChange={(values) => setChaveCnpj(values.value)}
+                                                   customInput={Input} disabled={gerandoQrCode}/>
+                                    : <></>}
+                                {tipo === "2" ?
+                                    <PatternFormat value={chaveCelular} format="(##) #####-####" mask="_"
+                                                   valueIsNumericString id="chave" tabIndex={2}
+                                                   placeholder="Chave Pix - (00) 00000-0000"
+                                                   onValueChange={(values) => setChaveCelular(values.value)}
+                                                   customInput={Input} disabled={gerandoQrCode}/>
+                                    : <></>}
+                                {tipo === "3" ?
+                                    <PatternFormat value={chaveFixo} format="(##) ####-####" mask="_"
+                                                   valueIsNumericString id="chave" tabIndex={2}
+                                                   placeholder="Chave Pix - (00) 0000-0000"
+                                                   onValueChange={(values) => setChaveFixo(values.value)}
+                                                   customInput={Input} disabled={gerandoQrCode}/>
+                                    : <></>}
+                                {tipo === "4" ?
+                                    <Input type="email" id="chave" value={chaveEmail}
+                                           onChange={(evt) => setChaveEmail(evt.target.value)}
+                                           placeholder="Chave Pix - seu.endereco@de-email.com" tabIndex={2}
                                            maxLength={70} disabled={gerandoQrCode}/>
-                                </span>
+                                    : <></>}
+                                {tipo === "5" ?
+                                    <Input type="text" id="chave" value={chaveAleatorio}
+                                           onChange={(evt) => setChaveAleatorio(evt.target.value)}
+                                           placeholder="Chave Pix - Chave Aleatória" tabIndex={2} maxLength={70}
+                                           disabled={gerandoQrCode}/>
+                                    : <></>}
                             </div>
                         </div>
                         <p className="text-sm text-slate-500">
@@ -273,7 +285,8 @@ const Index = () => {
                         <div className={cn("w-full", comoFunciona ? "rounded outline outline-2" +
                             " outline-offset-2 outline-sky-700" : "")}>
                             <Input type="text" id="nome" placeholder="Nome do(a) Beneficiário(a)" tabIndex={3}
-                                   maxLength={25} value={nome} onChange={(evt) => setNome(evt.target.value)} disabled={gerandoQrCode}/>
+                                   maxLength={25} value={nome} onChange={(evt) => setNome(evt.target.value)}
+                                   disabled={gerandoQrCode}/>
                         </div>
                         <p className="text-sm text-slate-500">
                             <span
@@ -291,7 +304,8 @@ const Index = () => {
                         <div className={cn("w-full", comoFunciona ? "rounded outline outline-2" +
                             " outline-offset-2 outline-yellow-700" : "")}>
                             <Input type="text" id="cidade" placeholder="Cidade do(a) Beneficiário(a)" tabIndex={4}
-                                   maxLength={15} value={cidade} onChange={(evt) => setCidade(evt.target.value)} disabled={gerandoQrCode}/>
+                                   maxLength={15} value={cidade} onChange={(evt) => setCidade(evt.target.value)}
+                                   disabled={gerandoQrCode}/>
                         </div>
                         <p className="text-sm text-slate-500">
                             <span
@@ -308,7 +322,8 @@ const Index = () => {
 
                         <div className={cn("w-full", comoFunciona ? "rounded outline outline-2" +
                             " outline-offset-2 outline-pink-700" : "")}>
-                            <Select value={semValor} onValueChange={selectSemValor} disabled={gerandoQrCode}>
+                            <Select value={semValor} onValueChange={(selected) => setSemValor(selected)}
+                                    disabled={gerandoQrCode}>
                                 <SelectTrigger id="selectValor" className="w-full" tabIndex={5}>
                                     <SelectValue placeholder="Pedir valor?"/>
                                 </SelectTrigger>
@@ -321,17 +336,18 @@ const Index = () => {
                             <div
                                 className={`mt-2 flex max-w-[300px] items-center space-x-4 rounded-md border border-slate-300 p-4 dark:border-slate-600${semValor === "0" ? " hidden" : ""}`}>
                                 <Label htmlFor="valor">Valor:</Label>
-                                <IMaskInput value={valor} mask={Number} unmask={true} scale={2} signed={false} min={0}
-                                            max={99999} thousandsSeparator="." padFractionalZeros={true}
-                                            inputRef={valorRef} normalizeZeros={false}
-                                            onAccept={(value: string) => setValor(value)}/>
+                                <CurrencyInput value={valor} customInput={Input} disabled={gerandoQrCode} onValueChange={(val) => setValor(Number(val.value/100))}/>
+                                {/*<NumericFormat value={valor} mask={Number} unmask={true} scale={2} signed={false} min={0}*/}
+                                {/*            max={99999} thousandsSeparator="." padFractionalZeros={true}*/}
+                                {/*            inputRef={valorRef} normalizeZeros={false}*/}
+                                {/*            onAccept={(value: string) => setValor(value)}/>*/}
                             </div>
                         </div>
                     </div>
 
                     <div className="mt-6 grid w-full items-center justify-items-center gap-3 md:flex">
                         <Button type="submit"
-                                disabled={gerandoQrCode || chave === "" || nome === "" || cidade === ""} size="lg"
+                                disabled={gerandoQrCode || chave() === "" || nome === "" || cidade === ""} size="lg"
                                 className="text-md w-full bg-emerald-500 px-8 hover:bg-emerald-600 dark:bg-emerald-500 dark:hover:bg-emerald-600 md:w-fit"
                                 onClick={gerarQRCode}>
                             <QrCode className="mr-2 inline-block w-4"/>

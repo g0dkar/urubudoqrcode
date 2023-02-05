@@ -1,12 +1,26 @@
 import crc16 from "@/lib/crc16"
 
+/**
+ * Interface de um campo do Pix. Os campos todos são compostos de `ID + Tamanho + Valor` (vulgo TLV: Type, Length,
+ * Value).
+ *
+ * No Pix, o valor de um campo pode ser outros campos.
+ */
 interface PixField {
+    // ID do Campo
     id: string
+    // Nome amigável do campo (para exibir no modo "Como funciona?")
     name: string
+    // Valor do campo
     value: string | Array<PixField>
+    // Valor do campo computado como String, caso seja composto de outros campos (para exibir no modo "Como funciona?")
     valueStr?: string
+    // Descrição amigável do campo (para exibir no modo "Como funciona?")
     description: string
+    // Descrição dada a este campo pela documentação do BaCen (para exibir no modo "Como funciona?")
     bacenDescription: string
+    // Representação completa deste campo, pronta para concatenação com outros campos para se formar o código Pix
+    // Copia-e-Cola completo
     computed: string
 }
 
@@ -19,6 +33,9 @@ export default class PixQRCode {
     private PIX_GUI = "BR.GOV.BCB.PIX"
     private CRC_PREFIX = "6304"
 
+    /**
+     * Gera a representação textual de um `PixField`.
+     */
     private pixField(field: PixField) {
         let val: string
 
@@ -28,13 +45,20 @@ export default class PixQRCode {
             val = field.value.reduce((previousValue, currentValue) => previousValue + this.pixField(currentValue), "")
         }
 
-        return field.id + this.zeroPad(val, 2) + val
+        return field.id + this.zeroPad(val.length.toString(), 2) + val
     }
 
+    /**
+     * Normaliza uma String, removendo acentos. Por exemplo, transforma "São Paulo" em "Sao Paulo".
+     */
     private normalizar(str: string) {
         return str.normalize('NFD').replace(/[\u0300-\u036f]/g, "")
     }
 
+    /**
+     * Precede uma string com `"0"` até que ela tenha um determinado tamanho. Por exemplo, `"1A"` e tamanho `4` se torna
+     * `"001A"`
+     */
     private zeroPad(str: string, size: number) {
         const padSize = size - str.length
 
