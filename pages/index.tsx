@@ -77,7 +77,9 @@ const CampoPix = ({show, campo, className = ""}) => {
 
 const Index = () => {
     const [tipo, setTipo] = useState("0")
-    const [chave, setChave] = useState("")
+    const [chaveCpfCnpj, setChaveCpfCnpj] = useState("0")
+    const [chaveEmail, setChaveEmail] = useState("")
+    const [chaveAleatorio, setChaveAleatorio] = useState("")
     const [maskChave, setMaskChave] = useState("000.000.000-00")
     const [nome, setNome] = useState("")
     const [cidade, setCidade] = useState("")
@@ -87,6 +89,7 @@ const Index = () => {
     const [qrcodeDataUrl, setQrcodeDataUrl] = useState("")
     const [comoFunciona, setComoFunciona] = useState(false)
     const [btnCopiarTxt, setBtnCopiarTxt] = useState("Copiar")
+    const [gerandoQrCode, setGerandoQrCode] = useState(false)
     const chaveRef = useRef(null)
     const valorRef = useRef(null)
 
@@ -124,11 +127,6 @@ const Index = () => {
         }
     }
 
-    const onChangeChave = (evt) => {
-        evt.preventDefault()
-        setChave(evt.target.value)
-    }
-
     const onChangeNome = (evt) => {
         evt.preventDefault()
         setNome(evt.target.value)
@@ -148,6 +146,13 @@ const Index = () => {
             evt.preventDefault()
         }
 
+        if (!gerandoQrCode) {
+            setGerandoQrCode(true)
+            setTimeout(executarGeracao, 50)
+        }
+    }
+
+    const executarGeracao = () => {
         const pixQrCode = new PixQRCode()
         pixQrCode.chave = (tipo === "3" ? "+55" : "") + chave
         pixQrCode.nome = nome
@@ -160,6 +165,8 @@ const Index = () => {
         const result = new QRCode(codigoPix.pix).render()
         const dataURL = result.toDataURL()
         setQrcodeDataUrl(dataURL)
+
+        setGerandoQrCode(false)
     }
 
     const recomecarQRCode = (evt) => {
@@ -208,7 +215,7 @@ const Index = () => {
                 </div>
             </div>
             <div className="grid w-full grid-cols-5 gap-4">
-                <div className="col-span-5 lg:col-span-3">
+                <form className="col-span-5 lg:col-span-3" onSubmit={gerarQRCode}>
                     <h2 className="mt-10 mb-5 scroll-m-20 border-b border-b-slate-200 pb-2 text-3xl font-semibold tracking-tight transition-colors first:mt-0 dark:border-b-slate-700">
                         <FormInput className="mb-1 mr-2 inline-block"/>
                         Informações do Pix
@@ -240,17 +247,21 @@ const Index = () => {
                                                 onAccept={(value: string) => setChave(value)} inputRef={chaveRef}/>
                                 </span>
                                 <span className={`w-full${tipo === "4" ? "" : " hidden"}`}>
-                                    <Input type="text" id="chave4" value={chave} onChange={onChangeChave}
-                                           placeholder="Chave Pix (Chave Aleatória)" tabIndex={2} maxLength={70}/>
+                                    <Input type="text" id="chave4" value={chaveAleatorio} onChange={(evt) => setChaveAleatorio(evt.target.value)}
+                                           placeholder="Chave Pix (Chave Aleatória)" tabIndex={2} maxLength={70}
+                                           disabled={gerandoQrCode}/>
                                 </span>
                                 <span className={`w-full${tipo === "2" ? "" : " hidden"}`}>
-                                    <Input type="email" id="chave2" value={chave} onChange={onChangeChave}
+                                    <Input type="email" id="chave2" value={chaveEmail} onChange={(evt) => setChaveEmail(evt.target.value)}
                                            placeholder="Chave Pix (seu.endereco@de-email.com)" tabIndex={2}
-                                           maxLength={70}/>
+                                           maxLength={70} disabled={gerandoQrCode}/>
                                 </span>
                             </div>
                         </div>
-                        <p className="text-sm text-slate-500">Chave Pix que irá receber a transferência.</p>
+                        <p className="text-sm text-slate-500">
+                            <span
+                                className="pr-3 font-medium leading-none text-slate-700 dark:text-slate-300">Tamanho: {nome.length}/25</span>
+                            Chave Pix que irá receber a transferência.</p>
                     </div>
 
                     <div className="mt-6 grid w-full items-center gap-1.5">
@@ -262,7 +273,7 @@ const Index = () => {
                         <div className={cn("w-full", comoFunciona ? "rounded outline outline-2" +
                             " outline-offset-2 outline-sky-700" : "")}>
                             <Input type="text" id="nome" placeholder="Nome do(a) Beneficiário(a)" tabIndex={3}
-                                   maxLength={25} value={nome} onChange={onChangeNome}/>
+                                   maxLength={25} value={nome} onChange={(evt) => setNome(evt.target.value)} disabled={gerandoQrCode}/>
                         </div>
                         <p className="text-sm text-slate-500">
                             <span
@@ -280,7 +291,7 @@ const Index = () => {
                         <div className={cn("w-full", comoFunciona ? "rounded outline outline-2" +
                             " outline-offset-2 outline-yellow-700" : "")}>
                             <Input type="text" id="cidade" placeholder="Cidade do(a) Beneficiário(a)" tabIndex={4}
-                                   maxLength={15} value={cidade} onChange={onChangeCidade}/>
+                                   maxLength={15} value={cidade} onChange={(evt) => setCidade(evt.target.value)} disabled={gerandoQrCode}/>
                         </div>
                         <p className="text-sm text-slate-500">
                             <span
@@ -297,7 +308,7 @@ const Index = () => {
 
                         <div className={cn("w-full", comoFunciona ? "rounded outline outline-2" +
                             " outline-offset-2 outline-pink-700" : "")}>
-                            <Select value={semValor} onValueChange={selectSemValor}>
+                            <Select value={semValor} onValueChange={selectSemValor} disabled={gerandoQrCode}>
                                 <SelectTrigger id="selectValor" className="w-full" tabIndex={5}>
                                     <SelectValue placeholder="Pedir valor?"/>
                                 </SelectTrigger>
@@ -319,19 +330,20 @@ const Index = () => {
                     </div>
 
                     <div className="mt-6 grid w-full items-center justify-items-center gap-3 md:flex">
-                        <Button
-                            className="text-md w-full bg-emerald-500 px-8 hover:bg-emerald-600 dark:bg-emerald-500 dark:hover:bg-emerald-600 md:w-fit"
-                            disabled={chave === "" || nome === "" || cidade === ""} size="lg"
-                            onClick={gerarQRCode}>
+                        <Button type="submit"
+                                disabled={gerandoQrCode || chave === "" || nome === "" || cidade === ""} size="lg"
+                                className="text-md w-full bg-emerald-500 px-8 hover:bg-emerald-600 dark:bg-emerald-500 dark:hover:bg-emerald-600 md:w-fit"
+                                onClick={gerarQRCode}>
                             <QrCode className="mr-2 inline-block w-4"/>
-                            Gerar QRCode
+                            {gerandoQrCode ? "Gerando..." : "Gerar QRCode"}
                         </Button>
-                        <Button variant="outline" className="w-fit px-4" onClick={recomecarQRCode} size="sm">
+                        <Button variant="outline" className="w-fit px-4" onClick={recomecarQRCode}
+                                disabled={gerandoQrCode} size="sm">
                             <RefreshCw className="mr-2 inline-block w-4"/>
                             Recomeçar
                         </Button>
                     </div>
-                </div>
+                </form>
                 <div className="col-span-5 lg:col-span-2">
                     <h2 className="mt-10 mb-5 scroll-m-20 border-b border-b-slate-200 pb-2 text-3xl font-semibold tracking-tight transition-colors first:mt-0 dark:border-b-slate-700">
                         <ChevronsRight className="mb-1 mr-2 inline-block"/>
