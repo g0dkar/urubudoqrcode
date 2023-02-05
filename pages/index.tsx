@@ -37,9 +37,9 @@ const CampoPix = ({show, campo, className = ""}) => {
     } else {
         return <Popover>
             <PopoverTrigger
-                className={cn("text-md relative mr-1 mb-1 inline-block cursor-pointer rounded bg-slate-100 py-[0.2rem]" +
-                    " px-[0.3rem] font-mono text-slate-900 hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-400" +
-                    " hover:dark:bg-slate-700", className)}>
+                className={cn("text-sm text-left max-w-full relative mr-1 mb-1 inline-block" +
+                    " cursor-pointer rounded bg-slate-100 py-[0.2rem] px-[0.3rem] font-mono text-slate-900" +
+                    " hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-400 hover:dark:bg-slate-700", className)}>
                 {campo?.computed}
             </PopoverTrigger>
             <PopoverContent className="w-80 border border-slate-200 shadow-md dark:border-slate-700">
@@ -366,20 +366,22 @@ const Index = () => {
                             Pix Copia-e-Cola:
                         </h3>
                         <div className="break-words rounded-md border border-emerald-300 p-4 dark:border-emerald-900">
-                            <CampoPix show={comoFunciona} campo={pix?.fields[0]}/>
-                            <CampoPix show={comoFunciona} campo={pix?.fields[1]}
-                                      className="border border-lime-300 text-lime-900 hover:border-lime-400 dark:border-lime-900 dark:text-lime-500 hover:dark:border-lime-800"/>
-                            <CampoPix show={comoFunciona} campo={pix?.fields[2]}/>
-                            <CampoPix show={comoFunciona} campo={pix?.fields[3]}/>
-                            <CampoPix show={comoFunciona} campo={pix?.fields[4]}
-                                      className="border border-pink-300 text-pink-900 hover:border-pink-400 dark:border-pink-900 dark:text-pink-500 hover:dark:border-pink-800"/>
-                            <CampoPix show={comoFunciona} campo={pix?.fields[5]}/>
-                            <CampoPix show={comoFunciona} campo={pix?.fields[6]}
-                                      className="border border-sky-300 text-sky-900 hover:border-sky-400 dark:border-sky-900 dark:text-sky-500 hover:dark:border-sky-800"/>
-                            <CampoPix show={comoFunciona} campo={pix?.fields[7]}
-                                      className="border border-yellow-300 text-yellow-900 hover:border-yellow-400 dark:border-yellow-900 dark:text-yellow-500 hover:dark:border-yellow-800"/>
-                            <CampoPix show={comoFunciona} campo={pix?.fields[8]}/>
-                            <CampoPix show={comoFunciona} campo={pix?.fields[9]}/>
+                            <div>
+                                <CampoPix show={comoFunciona} campo={pix?.fields[0]}/>
+                                <CampoPix show={comoFunciona} campo={pix?.fields[1]}
+                                          className="border border-lime-300 text-lime-900 hover:border-lime-400 dark:border-lime-900 dark:text-lime-500 hover:dark:border-lime-800"/>
+                                <CampoPix show={comoFunciona} campo={pix?.fields[2]}/>
+                                <CampoPix show={comoFunciona} campo={pix?.fields[3]}/>
+                                <CampoPix show={comoFunciona} campo={pix?.fields[4]}
+                                          className="border border-pink-300 text-pink-900 hover:border-pink-400 dark:border-pink-900 dark:text-pink-500 hover:dark:border-pink-800"/>
+                                <CampoPix show={comoFunciona} campo={pix?.fields[5]}/>
+                                <CampoPix show={comoFunciona} campo={pix?.fields[6]}
+                                          className="border border-sky-300 text-sky-900 hover:border-sky-400 dark:border-sky-900 dark:text-sky-500 hover:dark:border-sky-800"/>
+                                <CampoPix show={comoFunciona} campo={pix?.fields[7]}
+                                          className="border border-yellow-300 text-yellow-900 hover:border-yellow-400 dark:border-yellow-900 dark:text-yellow-500 hover:dark:border-yellow-800"/>
+                                <CampoPix show={comoFunciona} campo={pix?.fields[8]}/>
+                                <CampoPix show={comoFunciona} campo={pix?.fields[9]}/>
+                            </div>
 
                             <div
                                 className={"text-xs mt-2 text-slate-500 dark:text-slate-400" + (!comoFunciona ? " hidden" : "")}>
