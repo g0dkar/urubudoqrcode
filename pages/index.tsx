@@ -26,6 +26,7 @@ import {io} from "@/lib/qrcode-kotlin"
 import {PatternFormat} from "react-number-format";
 import {CurrencyInput} from "@/components/ui/currency-input";
 import QRCode = io.github.g0dkar.qrcode.QRCode;
+import {isValidCPF, isValidCNPJ, isValidEmail, isValidChaveAleatoria} from "@/lib/utils";
 
 const CampoPix = ({show, campo, className = ""}) => {
     const campoValue = campo?.valueStr || campo?.value
@@ -126,7 +127,7 @@ const Index = () => {
         } else if (tipo === "4") {
             return 10
         } else if (tipo === "5") {
-            return 70
+            return 36
         }
 
         return 0
@@ -191,6 +192,19 @@ const Index = () => {
             setBtnCopiarTxt("Copiado!")
             setTimeout(() => setBtnCopiarTxt("Copiar"), 5000)
         })
+    }
+
+    const isValidChave = () => {
+        if (tipo === "0" && chave().length === chaveMaxSize() && !isValidCPF(chave())) {
+            return false
+        } else if (tipo === "1" && chave().length === chaveMaxSize() && !isValidCNPJ(chave())) {
+            return false
+        } else if (tipo === "2" && chave().length > 3 && !isValidEmail(chave())) {
+            return false
+        } else if (tipo === "5" && chave().length === chaveMaxSize() && !isValidChaveAleatoria(chave())) {
+            return false
+        }
+        return true
     }
 
     return <Layout>
@@ -283,14 +297,19 @@ const Index = () => {
                                 {tipo === "5" ?
                                     <Input type="text" id="chave" value={chaveAleatorio}
                                            onChange={(evt) => setChaveAleatorio(evt.target.value)}
-                                           placeholder="Chave Pix - Chave Aleatória" tabIndex={2} maxLength={70}
+                                           placeholder="Chave Pix - Chave Aleatória" tabIndex={2} maxLength={36}
                                            disabled={gerandoQrCode}/>
                                     : <></>}
                             </div>
                         </div>
                         <p className="text-sm text-slate-500">
                             <span
-                                className="pr-3 font-medium leading-none text-slate-700 dark:text-slate-300">Tamanho: {chave().length - (tipo === "3" || tipo === "4" ? 3 : 0)}/{chaveMaxSize()}</span>
+                                className="pr-3 font-medium leading-none text-slate-700 dark:text-slate-300">
+                                Tamanho: {chave().length - (tipo === "3" || tipo === "4" ? 3 : 0)}/{chaveMaxSize()}
+                            </span>
+                            <span className="text-red-700 font-semibold mr-1">
+                                {!isValidChave() ? `A chave digitada é inválida.` : ''}
+                            </span>
                             Chave Pix que irá receber a transferência.</p>
                     </div>
 
@@ -362,7 +381,7 @@ const Index = () => {
 
                     <div className="mt-6 grid w-full items-center justify-items-center gap-3 md:flex">
                         <Button type="submit"
-                                disabled={gerandoQrCode || chave() === "" || nome === "" || cidade === ""} size="lg"
+                                disabled={gerandoQrCode || chave() === "" || nome === "" || cidade === "" || !isValidChave()} size="lg"
                                 className="text-md w-full bg-emerald-500 px-8 hover:bg-emerald-600 dark:bg-emerald-500 dark:hover:bg-emerald-600 md:w-fit"
                                 onClick={gerarQRCode}>
                             <QrCode className="mr-2 inline-block w-4"/>
