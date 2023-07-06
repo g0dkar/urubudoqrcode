@@ -58,7 +58,7 @@
     "@types/react-dom": "^18.0.7",
     "autoprefixer": "^10.4.13",
     "eslint": "^8.31.0",
-    "eslint-config-next": "13.1.6",
+    "eslint-config-next": "13.4.8",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-react": "^7.31.11",
     "eslint-plugin-tailwindcss": "^3.8.0",
