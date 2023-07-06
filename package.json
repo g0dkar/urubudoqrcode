@@ -41,7 +41,7 @@
     "@typescript-eslint/parser": "^5.50.0",
     "class-variance-authority": "^0.4.0",
     "clsx": "^1.2.1",
-    "lucide-react": "0.109.0",
+    "lucide-react": "0.258.0",
     "next": "^13.1.6",
     "next-themes": "^0.2.1",
     "react": "^18.2.0",
