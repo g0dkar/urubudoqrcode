@@ -307,9 +307,12 @@ const Index = () => {
                                 className="pr-3 font-medium leading-none text-slate-700 dark:text-slate-300">
                                 Tamanho: {chave().length - (tipo === "3" || tipo === "4" ? 3 : 0)}/{chaveMaxSize()}
                             </span>
-                            <span className="text-red-700 font-semibold mr-1">
-                                {!isValidChave() ? `A chave digitada é inválida.` : ''}
-                            </span>
+                            {!isValidChave() ? 
+                                <span className="text-red-700 font-semibold mr-1">
+                                    A chave digitada é inválida.
+                                </span>
+                                :
+                                <></> }
                             Chave Pix que irá receber a transferência.</p>
                     </div>
 
