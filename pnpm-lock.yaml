@@ -35,7 +35,7 @@ specifiers:
   '@types/react-dom': ^18.0.7
   '@typescript-eslint/parser': ^5.50.0
   autoprefixer: ^10.4.13
-  class-variance-authority: ^0.4.0
+  class-variance-authority: ^0.6.0
   clsx: ^1.2.1
   eslint: ^8.31.0
   eslint-config-next: 13.4.8
@@ -86,7 +86,7 @@ dependencies:
   '@radix-ui/react-toggle-group': 1.0.2_biqbaboplfbrettd7655fr4n2y
   '@radix-ui/react-tooltip': 1.0.3_5ndqzdd6t4rivxsukjv3i3ak2q
   '@typescript-eslint/parser': 5.50.0_e2goxuthsvs76yuzzvokmknzr4
-  class-variance-authority: 0.4.0_typescript@5.1.6
+  class-variance-authority: 0.6.1
   clsx: 1.2.1
   lucide-react: 0.258.0_react@18.2.0
   next: 13.4.8_biqbaboplfbrettd7655fr4n2y
@@ -1798,15 +1798,10 @@ packages:
     resolution: {integrity: sha512-jJ0bqzaylmJtVnNgzTeSOs8DPavpbYgEr/b0YL8/2GO3xJEhInFmhKMUnEJQjZumK7KXGFhUy89PrsJWlakBVg==}
     dev: false
 
-  /class-variance-authority/0.4.0_typescript@5.1.6:
-    resolution: {integrity: sha512-74enNN8O9ZNieycac/y8FxqgyzZhZbxmCitAtAeUrLPlxjSd5zA7LfpprmxEcOmQBnaGs5hYhiSGnJ0mqrtBLQ==}
-    peerDependencies:
-      typescript: '>= 4.5.5 < 5'
-    peerDependenciesMeta:
-      typescript:
-        optional: true
+  /class-variance-authority/0.6.1:
+    resolution: {integrity: sha512-eurOEGc7YVx3majOrOb099PNKgO3KnKSApOprXI4BTq6bcfbqbQXPN2u+rPPmIJ2di23bMwhk0SxCCthBmszEQ==}
     dependencies:
-      typescript: 5.1.6
+      clsx: 1.2.1
     dev: false
 
   /client-only/0.0.1:
