@@ -24,6 +24,7 @@ projeto :)**
 - @filiperaiz - Por ter ajudado com seu projeto [Roots Design System](https://github.com/filiperaiz/roots-ds),
   ajudou bastante com máscaras para valor, telefone, etc.
 - @Marlysson - Ajudou testando várias coisas, em particular interações com chaves que usam e-mail :)
+- @dispew - Contribuiu com melhorias nas validações e mensagens de validação mostradas aos usuários. Obrigado! :D
 
 ## Licença
 
