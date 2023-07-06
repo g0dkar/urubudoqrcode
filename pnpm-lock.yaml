@@ -1,7 +1,7 @@
 lockfileVersion: 5.4
 
 specifiers:
-  '@angular-eslint/template-parser': ^15.2.0
+  '@angular-eslint/template-parser': ^16.0.0
   '@ianvs/prettier-plugin-sort-imports': ^4.0.0
   '@next/font': ^13.1.6
   '@radix-ui/react-accessible-icon': ^1.0.1
@@ -57,7 +57,7 @@ specifiers:
   typescript: ^4.5.3
 
 dependencies:
-  '@angular-eslint/template-parser': 15.2.0_7uibuqfxkfaozanbtbziikiqje
+  '@angular-eslint/template-parser': 16.0.3_7uibuqfxkfaozanbtbziikiqje
   '@next/font': 13.4.8
   '@radix-ui/react-accessible-icon': 1.0.1_biqbaboplfbrettd7655fr4n2y
   '@radix-ui/react-accordion': 1.1.0_biqbaboplfbrettd7655fr4n2y
@@ -108,7 +108,7 @@ devDependencies:
   eslint-config-next: 13.4.8_7uibuqfxkfaozanbtbziikiqje
   eslint-config-prettier: 8.6.0_eslint@8.32.0
   eslint-plugin-react: 7.32.1_eslint@8.32.0
-  eslint-plugin-tailwindcss: 3.8.1_5ciphsvxr7lsjfc7cuvfrateci
+  eslint-plugin-tailwindcss: 3.8.1_xk6fqrdtmqh3bxakrs7wtr7tvq
   postcss: 8.4.21
   prettier: 2.8.3
   tailwindcss: 3.2.4_postcss@8.4.21
@@ -124,16 +124,16 @@ packages:
       '@jridgewell/trace-mapping': 0.3.17
     dev: true
 
-  /@angular-eslint/bundled-angular-compiler/15.2.0:
-    resolution: {integrity: sha512-a0bfXxYyGoWJHrVQ4QER0HdRgselcTtJeyqiFPAxID2ZxF0IBGKLNTtugUTXekEmiLev8yGLX9TqAtthN57fEg==}
+  /@angular-eslint/bundled-angular-compiler/16.0.3:
+    resolution: {integrity: sha512-8zwY6ustiPXBEF3+jELKVwGk6j2HJn7GHbqAhDFR02YiE27iRMSGTHIAWGs6ZI7F1JgfrIsOHrUgzC1x95K6rg==}
 
-  /@angular-eslint/template-parser/15.2.0_7uibuqfxkfaozanbtbziikiqje:
-    resolution: {integrity: sha512-xnnxPfV/G0Ll3B0HGrF1ucsc/DHmNE6UhhmWxYPTERq0McbZGRiATa66hCoOZ/Rdylun4ogBfsRKAG8XxEvlvw==}
+  /@angular-eslint/template-parser/16.0.3_7uibuqfxkfaozanbtbziikiqje:
+    resolution: {integrity: sha512-IAWdwp/S9QC3EMiVxSS0E3ABy9PSidN3PW0Ll2EtM3mzXMYlpZXmxqd+B1xV/xKWzhk1Mp04QX8hHfG6Vq+qaQ==}
     peerDependencies:
       eslint: ^7.20.0 || ^8.0.0
       typescript: '*'
     dependencies:
-      '@angular-eslint/bundled-angular-compiler': 15.2.0
+      '@angular-eslint/bundled-angular-compiler': 16.0.3
       eslint: 8.32.0
       eslint-scope: 7.1.1
       typescript: 4.9.4
@@ -2299,7 +2299,7 @@ packages:
       string.prototype.matchall: 4.0.8
     dev: true
 
-  /eslint-plugin-tailwindcss/3.8.1_5ciphsvxr7lsjfc7cuvfrateci:
+  /eslint-plugin-tailwindcss/3.8.1_xk6fqrdtmqh3bxakrs7wtr7tvq:
     resolution: {integrity: sha512-b01CBIT6TrK5IhrwmjDkuLzl2di5yXUmL8RyEZV710sGtw2zesr2csyGOc7e/IuV6tb8MfuHeksgMvaBEl9qvA==}
     engines: {node: '>=12.13.0'}
     peerDependencies:
@@ -2307,7 +2307,7 @@ packages:
       '@typescript-eslint/parser': ^5.48.2
       tailwindcss: ^3.2.2
     dependencies:
-      '@angular-eslint/template-parser': 15.2.0_7uibuqfxkfaozanbtbziikiqje
+      '@angular-eslint/template-parser': 16.0.3_7uibuqfxkfaozanbtbziikiqje
       '@typescript-eslint/parser': 5.50.0_7uibuqfxkfaozanbtbziikiqje
       fast-glob: 3.2.12
       postcss: 8.4.21
