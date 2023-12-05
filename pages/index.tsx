@@ -21,12 +21,10 @@ import {
 import PixQRCode from "@/lib/pix"
 import {Checkbox} from "@/components/ui/checkbox"
 import {Popover, PopoverContent, PopoverTrigger} from "@/components/ui/popover"
-import {cn} from "@/lib/utils"
-import {io} from "@/lib/qrcode-kotlin"
+import {cn, isValidChaveAleatoria, isValidCNPJ, isValidCPF, isValidEmail} from "@/lib/utils"
 import {PatternFormat} from "react-number-format";
 import {CurrencyInput} from "@/components/ui/currency-input";
-import QRCode = io.github.g0dkar.qrcode.QRCode;
-import {isValidCPF, isValidCNPJ, isValidEmail, isValidChaveAleatoria} from "@/lib/utils";
+import {qrcode} from "qrcode-kotlin";
 
 const CampoPix = ({show, campo, className = ""}) => {
     const campoValue = campo?.valueStr || campo?.value
@@ -154,7 +152,7 @@ const Index = () => {
         const codigoPix = pixQrCode.codigo()
 
         setPix(codigoPix)
-        const result = new QRCode(codigoPix.pix).render()
+        const result = qrcode.QRCode.Companion.ofSquares().build(codigoPix.pix).render()
         const dataURL = result.toDataURL()
         setQrcodeDataUrl(dataURL)
 
@@ -307,7 +305,7 @@ const Index = () => {
                                 className="pr-3 font-medium leading-none text-slate-700 dark:text-slate-300">
                                 Tamanho: {chave().length - (tipo === "3" || tipo === "4" ? 3 : 0)}/{chaveMaxSize()}
                             </span>
-                            {!isValidChave() ? 
+                            {!isValidChave() ?
                                 <span className="text-red-700 font-semibold mr-1">
                                     A chave digitada é inválida.
                                 </span>
